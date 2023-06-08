@@ -15,38 +15,7 @@ namespace UserLoginNamespace
             registeredUsers = LoadData.LoadUserData();
         }
 
-        //public bool LoginUser(string loginUser, string passwordUser)
-        //{
-        //    bool loggedIn = false;
-        //    AesEncryption aesEncryption = new AesEncryption();
-
-        //    do
-        //    {
-        //        UserData user = registeredUsers.Find(u => u.Login == loginUser);
-        //        if (user != null)
-        //        {
-        //            string decryptedPassword = aesEncryption.Decrypt(user.Password);
-        //            if (passwordUser == decryptedPassword)
-        //            {
-        //                loggedIn = true;
-
-        //                return true;
-
-        //            }
-        //            else
-        //            {
-        //                loggedIn = false;
-        //                return false;
-        //            }
-        //        }
-        //        else
-        //        {
-
-        //        }
-        //    } while (!loggedIn);
-        //}
-
-        public bool LoginUser2(string login, string password, out string message)
+        public bool LoginUser(string login, string password, out string message)
         {
             bool loggedIn = false;
             AesEncryption aesEncryption = new AesEncryption();

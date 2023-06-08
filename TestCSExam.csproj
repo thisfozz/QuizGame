@@ -55,6 +55,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserInformations\UserData.cs" />
+    <Compile Include="UserManager\DataCorrectness.cs" />
     <Compile Include="UserManager\Login.cs" />
     <Compile Include="UserManager\UserRegistration.cs" />
   </ItemGroup>

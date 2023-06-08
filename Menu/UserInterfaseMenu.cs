@@ -4,6 +4,7 @@ using UserLoginNamespace;
 using UserRegistrationNamespace;
 using System.Threading;
 using System.Net;
+using DataCorrectnessNamespace;
 
 namespace UserInterfaseMenuNamespace
 {
@@ -45,7 +46,7 @@ namespace UserInterfaseMenuNamespace
             Console.Clear();
             bool isCorrectData = false, isAuthorization = false;
             int LoginAttempt = 0;
-            string text = " ";
+            string text = string.Empty;
 
             do
             {
@@ -55,21 +56,53 @@ namespace UserInterfaseMenuNamespace
                 Console.WriteLine("\t\t\t\t║                                                       ║");
                 Console.WriteLine("\t\t\t\t╠═══════════════════════════════════════════════════════║");
                 Console.WriteLine("\t\t\t\t║                                                       ║");
-                Console.WriteLine("\t\t\t\t║            Введите логин:                             ║");
+                Console.WriteLine("\t\t\t\t║    Введите логин:                                     ║");
                 Console.WriteLine("\t\t\t\t║                                                       ║");
-                Console.WriteLine("\t\t\t\t║            Введите пароль:                            ║");
+                Console.WriteLine("\t\t\t\t║    Введите пароль:                                    ║");
                 Console.WriteLine("\t\t\t\t║                                                       ║");
                 Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
 
-                Console.SetCursorPosition(60, 6);
+                Console.SetCursorPosition(52, 6);
                 string loginAuthUser = Console.ReadLine();
 
-                Console.SetCursorPosition(61, 8);
+                while (!DataCorrectness.isCheckLogin(loginAuthUser))
+                {
+                    Console.SetCursorPosition(90, 6);
+                    Console.Write("Недопустимый формат логина");
+                    System.Threading.Thread.Sleep(1000); // Приостановка на 1 секунду
+
+                    // Очистить сообщение об ошибке и поле ввода
+                    Console.SetCursorPosition(90, 6);
+                    Console.Write(new string(' ', "Недопустимый формат логина".Length));
+                    Console.SetCursorPosition(52, 6);
+                    Console.Write(new string(' ', loginAuthUser.Length));
+
+                    Console.SetCursorPosition(52, 6);
+                    loginAuthUser = Console.ReadLine();
+                }
+
+                Console.SetCursorPosition(53, 8);
                 string passwordAuthUser = Console.ReadLine();
 
-                string message = " ";
+                while (!DataCorrectness.isCheckPassword(passwordAuthUser))
+                {
+                    Console.SetCursorPosition(90, 8);
+                    Console.Write("Недопустимый формат пароля");
+                    System.Threading.Thread.Sleep(1000); // Приостановка на 1 секунду
 
-                isAuthorization = login.LoginUser2(loginAuthUser, passwordAuthUser, out message);
+                    // Очистить сообщение об ошибке и поле ввода
+                    Console.SetCursorPosition(90, 8);
+                    Console.Write(new string(' ', "Недопустимый формат пароля".Length));
+                    Console.SetCursorPosition(53, 8);
+                    Console.Write(new string(' ', passwordAuthUser.Length));
+
+                    Console.SetCursorPosition(53, 8);
+                    passwordAuthUser = Console.ReadLine();
+                }
+
+                string message = string.Empty;
+
+                isAuthorization = login.LoginUser(loginAuthUser, passwordAuthUser, out message);
 
                 if (isAuthorization)
                 {
@@ -133,115 +166,67 @@ namespace UserInterfaseMenuNamespace
 
         private void RegistrationForm()
         {
-            //
-        }
-
-        private void AuthorizationMenu()
-        {
             Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
             Console.WriteLine("\t\t\t\t║                                                       ║");
-            Console.WriteLine("\t\t\t\t║                  Добро пожаловать                     ║");
+            Console.WriteLine("\t\t\t\t║                     Регистрация                       ║");
             Console.WriteLine("\t\t\t\t║                                                       ║");
             Console.WriteLine("\t\t\t\t╠═══════════════════════════════════════════════════════║");
             Console.WriteLine("\t\t\t\t║                                                       ║");
-            Console.WriteLine("\t\t\t\t║   1. Войти в аккаунт                                  ║");
+            Console.WriteLine("\t\t\t\t║    Логин:                                             ║");
             Console.WriteLine("\t\t\t\t║                                                       ║");
-            Console.WriteLine("\t\t\t\t║   2. Создать аккаунт                                  ║");
+            Console.WriteLine("\t\t\t\t║    Пароль:                                            ║");
             Console.WriteLine("\t\t\t\t║                                                       ║");
             Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
-
-
-            bool isAuthorization = false, isRegistration = false;
-
-            while (true)
-            {
-                ConsoleKeyInfo keyInfo = Console.ReadKey();
-
-                if (keyInfo.Key == ConsoleKey.D1)
-                {
-                    Console.Clear();
-
-                    Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
-                    Console.WriteLine("\t\t\t\t║                                                       ║");
-                    Console.WriteLine("\t\t\t\t║                     Авторизация                       ║");
-                    Console.WriteLine("\t\t\t\t║                                                       ║");
-                    Console.WriteLine("\t\t\t\t╠═══════════════════════════════════════════════════════║");
-                    Console.WriteLine("\t\t\t\t║                                                       ║");
-                    Console.WriteLine("\t\t\t\t║            Введите логин:                             ║");
-                    Console.WriteLine("\t\t\t\t║                                                       ║");
-                    Console.WriteLine("\t\t\t\t║            Введите пароль:                            ║");
-                    Console.WriteLine("\t\t\t\t║                                                       ║");
-                    Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
-
-                    Console.SetCursorPosition(60, 6);
-                    string loginUser = Console.ReadLine();
-
-                    Console.SetCursorPosition(61, 8);
-                    string passwordUser = Console.ReadLine();
-
-                    string message = " ";
-
-                    isAuthorization = login.LoginUser2(loginUser, passwordUser, out message);
-                    if (isAuthorization)
-                    {
-                        Console.Clear();
-                        Console.WriteLine("\t\t\t\t ╔═══════════════════════════════════════════════════════╗");
-                        Console.WriteLine("\t\t\t\t ║                                                       ║");
-                        Console.WriteLine($"\t\t\t\t ║                {message}                 ║");
-                        Console.WriteLine("\t\t\t\t ║                                                       ║");
-                        Console.WriteLine("\t\t\t\t ╚═══════════════════════════════════════════════════════╝");
-                        Thread.Sleep(2000);
-                        Console.Clear();
-                        MainMenu();
-                        break;
-                    }
-                    else if (isAuthorization == false)
-                    {
-                        Console.Clear();
-                        Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
-                        Console.WriteLine("\t\t\t\t║                                                       ║");
-                        Console.WriteLine($"\t\t\t\t║              {message}                  ║");
-                        Console.WriteLine("\t\t\t\t║                                                       ║");
-                        Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
-                        Thread.Sleep(1000);
-                        Console.ReadKey();
-                        Console.Clear();
-
-                        continue;
-                    }
-                }
-                else if (keyInfo.Key == ConsoleKey.D2)
-                {
-                    Console.Clear();
-
-                    Console.WriteLine("Регистрация пользователя");
-
-                    Console.Write("Введите логин: ");
-                    string loginUser = Console.ReadLine();
-
-                    Console.Write("Введите пароль: ");
-                    string passwordUser = Console.ReadLine();
-
-                    Console.WriteLine("Введите дату рождения (дд-мм-гггг): ");
-                    DateTime birthdate = DateTime.Parse(Console.ReadLine());
-
-                    isRegistration = registration.Register(loginUser, passwordUser, birthdate);
-
-                    if (isRegistration)
-                    {
-                        Console.WriteLine("Регистрация прошла успешно");
-                        MainMenu();
-                        break;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Пользователь с таким логином уже зарегистрирован");
-                    }
-                }
-            }
         }
 
+        //private void AuthorizationMenu()
+        //{
+        //    Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
+        //    Console.WriteLine("\t\t\t\t║                                                       ║");
+        //    Console.WriteLine("\t\t\t\t║                  Добро пожаловать                     ║");
+        //    Console.WriteLine("\t\t\t\t║                                                       ║");
+        //    Console.WriteLine("\t\t\t\t╠═══════════════════════════════════════════════════════║");
+        //    Console.WriteLine("\t\t\t\t║                                                       ║");
+        //    Console.WriteLine("\t\t\t\t║   1. Войти в аккаунт                                  ║");
+        //    Console.WriteLine("\t\t\t\t║                                                       ║");
+        //    Console.WriteLine("\t\t\t\t║   2. Создать аккаунт                                  ║");
+        //    Console.WriteLine("\t\t\t\t║                                                       ║");
+        //    Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
 
+
+        //    bool isAuthorization = false, isRegistration = false;
+
+        //        //ConsoleKeyInfo keyInfo = Console.ReadKey();
+        //        else if (keyInfo.Key == ConsoleKey.D2)
+        //        {
+        //            Console.Clear();
+
+        //            Console.WriteLine("Регистрация пользователя");
+
+        //            Console.Write("Введите логин: ");
+        //            string loginUser = Console.ReadLine();
+
+        //            Console.Write("Введите пароль: ");
+        //            string passwordUser = Console.ReadLine();
+
+        //            Console.WriteLine("Введите дату рождения (дд-мм-гггг): ");
+        //            DateTime birthdate = DateTime.Parse(Console.ReadLine());
+
+        //            isRegistration = registration.Register(loginUser, passwordUser, birthdate);
+
+        //            if (isRegistration)
+        //            {
+        //                Console.WriteLine("Регистрация прошла успешно");
+        //                //MainMenu();
+        //                //break;
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("Пользователь с таким логином уже зарегистрирован");
+        //            }
+        //        }
+        //    }
+        //}
 
         private void MainMenu()
         {
