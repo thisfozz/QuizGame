@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AesEncryptionNamespace;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,7 @@ namespace TestCSExam
         {
             UserRegistration registration = new UserRegistration();
             Login login = new Login();
+            AesEncryption aesEncryption = new AesEncryption();
 
             Console.WriteLine("1. Регистрация нового пользователя");
             Console.WriteLine("2. Вход");
@@ -29,8 +31,7 @@ namespace TestCSExam
                     string password = Console.ReadLine();
                     Console.WriteLine("Введите дату рождения (дд-мм-гггг):");
                     DateTime birthdate = DateTime.Parse(Console.ReadLine());
-
-                    registration.Register(username, password, birthdate);
+                    registration.Register(username, aesEncryption.Encrypt(password), birthdate);
                     break;
                 case "2":
                     login.LoginUser();
