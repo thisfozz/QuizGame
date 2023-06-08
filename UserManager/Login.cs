@@ -15,37 +15,63 @@ namespace UserLoginNamespace
             registeredUsers = LoadData.LoadUserData();
         }
 
-        public void LoginUser()
+        //public bool LoginUser(string loginUser, string passwordUser)
+        //{
+        //    bool loggedIn = false;
+        //    AesEncryption aesEncryption = new AesEncryption();
+
+        //    do
+        //    {
+        //        UserData user = registeredUsers.Find(u => u.Login == loginUser);
+        //        if (user != null)
+        //        {
+        //            string decryptedPassword = aesEncryption.Decrypt(user.Password);
+        //            if (passwordUser == decryptedPassword)
+        //            {
+        //                loggedIn = true;
+
+        //                return true;
+
+        //            }
+        //            else
+        //            {
+        //                loggedIn = false;
+        //                return false;
+        //            }
+        //        }
+        //        else
+        //        {
+
+        //        }
+        //    } while (!loggedIn);
+        //}
+
+        public bool LoginUser2(string login, string password, out string message)
         {
             bool loggedIn = false;
             AesEncryption aesEncryption = new AesEncryption();
+            message = string.Empty;
 
-            do
+            UserData user = registeredUsers.Find(u => u.Login == login);
+            if (user != null)
             {
-                Console.WriteLine("Введите логин:");
-                string login = Console.ReadLine();
-                Console.WriteLine("Введите пароль:");
-                string enteredPassword = Console.ReadLine();
-
-                UserData user = registeredUsers.Find(u => u.Login == login);
-                if (user != null)
+                string decryptedPassword = aesEncryption.Decrypt(user.Password);
+                if (password == decryptedPassword)
                 {
-                    string decryptedPassword = aesEncryption.Decrypt(user.Password);
-                    if (enteredPassword == decryptedPassword)
-                    {
-                        Console.WriteLine("Вход выполнен успешно.");
-                        loggedIn = true;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Неверный логин или пароль. Повторите попытку.");
-                    }
+                    loggedIn = true;
+                    message = "Вход выполнен успешно.";
                 }
                 else
                 {
-                    Console.WriteLine("Неверный логин или пароль. Повторите попытку.");
+                    message = "Неверный логин или пароль. Повторите попытку.";
                 }
-            } while (!loggedIn);
+            }
+            else
+            {
+                message = "Пользователь не найден.";
+            }
+
+            return loggedIn;
         }
     }
 }
