@@ -19,11 +19,20 @@ namespace UserRegistrationNamespace
             return users.Exists(l => l.Login == login);
         }
 
-        public void Register(string login, string password, DateTime dateOfBirth)
+        public void Register()
         {
-            if (!IsUserRegistered(login))
+            Console.Write("Введите логин: ");
+            string loginUser = Console.ReadLine();
+
+            Console.Write("Введите пароль: ");
+            string passwordUser = Console.ReadLine();
+
+            Console.WriteLine("Введите дату рождения (дд-мм-гггг): ");
+            DateTime birthdate = DateTime.Parse(Console.ReadLine());
+
+            if (!IsUserRegistered(loginUser))
             {
-                UserData newUser = new UserData(login, password, dateOfBirth);
+                UserData newUser = new UserData(loginUser, passwordUser, birthdate);
                 users.Add(newUser);
                 LoadData.SaveUserData(users);
                 Console.WriteLine("Пользователь успешно зарегистрирован");
