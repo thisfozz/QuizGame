@@ -58,8 +58,7 @@
     <Compile Include="QuizUtility\QuizCreator.cs" />
     <Compile Include="UserInformations\UserData.cs" />
     <Compile Include="UserManager\DataCorrectness.cs" />
-    <Compile Include="UserManager\Login.cs" />
-    <Compile Include="UserManager\UserRegistration.cs" />
+    <Compile Include="UserManager\AuthenticationManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

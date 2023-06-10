@@ -1,7 +1,6 @@
 ﻿using System;
 using AesEncryptionNamespace;
-using UserLoginNamespace;
-using UserRegistrationNamespace;
+using AuthenticationManagerNamespace;
 using System.Threading;
 using System.Net;
 using DataCorrectnessNamespace;
@@ -18,8 +17,7 @@ namespace UserInterfaseMenuNamespace
 {
     public class UserInterfaseMenu
     {
-        private UserRegistration registration = new UserRegistration();
-        private Login login = new Login();
+        private AuthenticationManagerNamespace.AuthenticationManager authenticationManager = new AuthenticationManagerNamespace.AuthenticationManager();
         private AesEncryption aesEncryption = new AesEncryption();
 
         private void AuthorizationForm()
@@ -120,7 +118,8 @@ namespace UserInterfaseMenuNamespace
 
                 string message = string.Empty;
 
-                isAuthorization = login.LoginUser(loginAuthUser, passwordAuthUser, out message);
+                isAuthorization = authenticationManager.LoginUser(loginAuthUser, passwordAuthUser);
+
 
                 if (isAuthorization)
                 {
@@ -128,7 +127,7 @@ namespace UserInterfaseMenuNamespace
                     Console.Clear();
                     Console.WriteLine("\t\t\t\t╔════════════════════════════════════════════════════════════╗");
                     Console.WriteLine("\t\t\t\t║                                                            ║");
-                    Console.WriteLine($"\t\t\t\t║                {message}                      ║");
+                    Console.WriteLine($"\t\t\t\t║           Авторизация прошла успешно                       ║");
                     Console.WriteLine("\t\t\t\t║                                                            ║");
                     Console.WriteLine("\t\t\t\t╚════════════════════════════════════════════════════════════╝");
 
@@ -144,7 +143,7 @@ namespace UserInterfaseMenuNamespace
                     Console.Clear();
                     Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════════╗");
                     Console.WriteLine("\t\t\t\t║                                                           ║");
-                    Console.WriteLine($"\t\t\t\t║              {message}                  ║");
+                    Console.WriteLine($"\t\t\t\t║               Неверный логин или пароль                   ║");
                     Console.WriteLine("\t\t\t\t║                                                           ║");
                     Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════════╝");
                     Thread.Sleep(1000);
@@ -258,7 +257,7 @@ namespace UserInterfaseMenuNamespace
 
             string passwordEncrypt = aesEncryption.Encrypt(passwordRegistrationUser);
             DateTime correctData = DataCorrectness.ConvertToDate(dateBirthRegistrationUser);
-            isRegistration = registration.Register(loginRegistrationUser, passwordEncrypt, correctData);
+            isRegistration = authenticationManager.RegisterUser(loginRegistrationUser, passwordEncrypt, correctData);
 
             if (isRegistration)
             {
@@ -519,7 +518,7 @@ namespace UserInterfaseMenuNamespace
                         string json = File.ReadAllText("UserData.json");
                         JArray usersArray = JArray.Parse(json);
 
-                        JObject userToUpdate = usersArray.Children<JObject>().FirstOrDefault(user => user["Login"].ToString() == UserData.Login);
+                        JObject userToUpdate = usersArray.Children<JObject>().FirstOrDefault(user => user["Login"].ToString() == authenticationManager.GetLoggedInUserLogin());
 
                         if (userToUpdate != null)
                         {
@@ -527,6 +526,8 @@ namespace UserInterfaseMenuNamespace
                             string updatedJson = usersArray.ToString();
                             File.WriteAllText("UserData.json", updatedJson);
 
+                            Console.Clear();
+                            Console.WriteLine(userToUpdate);
                             Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
                             Console.WriteLine("\t\t\t\t║                                                       ║");
                             Console.WriteLine("\t\t\t\t║               Пароль успешно изменен                  ║");

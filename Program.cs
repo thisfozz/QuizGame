@@ -6,8 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UserInterfaseMenuNamespace;
-using UserLoginNamespace;
-using UserRegistrationNamespace;
 
 namespace TestCSExam
 {

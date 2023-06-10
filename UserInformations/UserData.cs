@@ -4,27 +4,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UserLoginNamespace;
 
 namespace UserDataNamespace
 {
     public class UserData
     {
         [JsonProperty]
-        public static string Login { get; set; }
+        public string Login { get; set; }
         public string Password { get; set; }
         public DateTime DateOfBirth { get; set; }
 
-        public UserData(string LoginUser, string Password, DateTime DateOfBirth)
+        public UserData(string Login, string Password, DateTime DateOfBirth)
         {
-            Login = LoginUser;
+            this.Login = Login;
             this.Password = Password;
             this.DateOfBirth = DateOfBirth;
-        }
-
-        public string getLogin()
-        {
-            return Login;
         }
     }
 }
