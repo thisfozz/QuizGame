@@ -1,11 +1,4 @@
-﻿using AesEncryptionNamespace;
-using QuizNamespace;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UserInterfaseMenuNamespace;
+﻿using UserInterfaseMenuNamespace;
 
 namespace TestCSExam
 {
