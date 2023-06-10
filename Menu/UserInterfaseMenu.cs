@@ -12,6 +12,8 @@ using Newtonsoft.Json.Linq;
 using System.IO;
 using UserDataNamespace;
 using Newtonsoft.Json;
+using AuxiliaryNamespace;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace UserInterfaseMenuNamespace
 {
@@ -65,6 +67,7 @@ namespace UserInterfaseMenuNamespace
             bool isCorrectData = false, isAuthorization = false;
             int LoginAttempt = 0;
             string text = string.Empty;
+            int cursorPositionInput, CursorPositionNotify, cursorNotifyAndInput;
 
             do
             {
@@ -80,44 +83,29 @@ namespace UserInterfaseMenuNamespace
                 Console.WriteLine("\t\t\t\t║                                                       ║");
                 Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
 
-                Console.SetCursorPosition(52, 6);
-                string loginAuthUser = Console.ReadLine();
+                text = "Недопустимый формат логина";
+                cursorPositionInput = 52;
+                CursorPositionNotify = 90;
+                cursorNotifyAndInput = 6;
 
+                Console.SetCursorPosition(cursorPositionInput, cursorNotifyAndInput);
+                string loginAuthUser = Console.ReadLine();
                 while (!DataCorrectness.isCheckLogin(loginAuthUser))
                 {
-                    Console.SetCursorPosition(90, 6);
-                    Console.Write("Недопустимый формат логина");
-                    Thread.Sleep(1000);
-
-                    Console.SetCursorPosition(90, 6);
-                    Console.Write(new string(' ', "Недопустимый формат логина".Length));
-                    Console.SetCursorPosition(52, 6);
-                    Console.Write(new string(' ', loginAuthUser.Length));
-
-                    Console.SetCursorPosition(52, 6);
-                    loginAuthUser = Console.ReadLine();
+                    if(!Auxiliary.AuxiliaryLog(text, loginAuthUser, cursorPositionInput, CursorPositionNotify, cursorNotifyAndInput));
                 }
 
-                Console.SetCursorPosition(53, 8);
-                string passwordAuthUser = Console.ReadLine();
 
+                text = "Недопустимый формат пароля";
+                cursorPositionInput = 53;
+                CursorPositionNotify = 90;
+                cursorNotifyAndInput = 8;
+                Console.SetCursorPosition(cursorPositionInput, cursorNotifyAndInput);
+                string passwordAuthUser = Console.ReadLine();
                 while (!DataCorrectness.isCheckPassword(passwordAuthUser))
                 {
-                    Console.SetCursorPosition(90, 8);
-                    Console.Write("Недопустимый формат пароля");
-                    Thread.Sleep(1000);
-
-                    Console.SetCursorPosition(90, 8);
-                    Console.Write(new string(' ', "Недопустимый формат пароля".Length));
-                    Console.SetCursorPosition(53, 8);
-                    Console.Write(new string(' ', passwordAuthUser.Length));
-
-                    Console.SetCursorPosition(53, 8);
-                    passwordAuthUser = Console.ReadLine();
+                    Auxiliary.AuxiliaryLog(text, passwordAuthUser, cursorPositionInput, CursorPositionNotify, cursorNotifyAndInput);
                 }
-
-                string message = string.Empty;
-
                 isAuthorization = authenticationManager.LoginUser(loginAuthUser, passwordAuthUser);
 
 
@@ -182,6 +170,9 @@ namespace UserInterfaseMenuNamespace
         }
         private void RegistrationForm()
         {
+
+            int cursorPositionInput, CursorPositionNotify, cursorNotifyAndInput;
+
             Console.Clear();
             Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
             Console.WriteLine("\t\t\t\t║                                                       ║");
@@ -200,61 +191,40 @@ namespace UserInterfaseMenuNamespace
             bool isRegistration = false;
             string text = string.Empty;
 
-            Console.SetCursorPosition(44, 6);
+            text = "Недопустимый формат логина";
+            cursorPositionInput = 44;
+            CursorPositionNotify = 90;
+            cursorNotifyAndInput = 6;
+            Console.SetCursorPosition(cursorPositionInput, cursorNotifyAndInput);
             string loginRegistrationUser = Console.ReadLine();
-
             while (!DataCorrectness.isCheckLogin(loginRegistrationUser))
             {
-                Console.SetCursorPosition(90, 6);
-                Console.Write("Недопустимый формат логина");
-                System.Threading.Thread.Sleep(1000);
-
-                Console.SetCursorPosition(90, 6);
-                Console.Write(new string(' ', "Недопустимый формат логина".Length));
-                Console.SetCursorPosition(44, 6);
-                Console.Write(new string(' ', loginRegistrationUser.Length));
-
-                Console.SetCursorPosition(44, 6);
-                loginRegistrationUser = Console.ReadLine();
+                Auxiliary.AuxiliaryLog(text, loginRegistrationUser, cursorPositionInput, CursorPositionNotify, cursorNotifyAndInput);
             }
 
-            Console.SetCursorPosition(45, 8);
-            string passwordRegistrationUser = Console.ReadLine();
 
+            text = "Недопустимый формат пароля";
+            cursorPositionInput = 45;
+            CursorPositionNotify = 90;
+            cursorNotifyAndInput = 8;
+            Console.SetCursorPosition(cursorPositionInput, cursorNotifyAndInput);
+            string passwordRegistrationUser = Console.ReadLine();
             while (!DataCorrectness.isCheckPassword(passwordRegistrationUser))
             {
-                Console.SetCursorPosition(90, 8);
-                Console.Write("Недопустимый формат пароля");
-                System.Threading.Thread.Sleep(1000);
-
-                Console.SetCursorPosition(90, 8);
-                Console.Write(new string(' ', "Недопустимый формат пароля".Length));
-                Console.SetCursorPosition(45, 8);
-                Console.Write(new string(' ', passwordRegistrationUser.Length));
-
-                Console.SetCursorPosition(45, 8);
-                passwordRegistrationUser = Console.ReadLine();
+                Auxiliary.AuxiliaryLog(text, passwordRegistrationUser, cursorPositionInput, CursorPositionNotify, cursorNotifyAndInput);
             }
 
-            Console.SetCursorPosition(52, 10);
-            string dateBirthRegistrationUser = Console.ReadLine();
 
+            text = "Недопустимый формат даты";
+            cursorPositionInput = 52;
+            CursorPositionNotify = 90;
+            cursorNotifyAndInput = 10;
+            Console.SetCursorPosition(cursorPositionInput, cursorNotifyAndInput);
+            string dateBirthRegistrationUser = Console.ReadLine();
             while (!DataCorrectness.IsCheckDate(dateBirthRegistrationUser))
             {
-                Console.SetCursorPosition(90, 10);
-                Console.Write("Недопустимый формат даты");
-                System.Threading.Thread.Sleep(1000); // Приостановка на 1 секунду
-
-                // Очистить сообщение об ошибке и поле ввода
-                Console.SetCursorPosition(90, 10);
-                Console.Write(new string(' ', "Недопустимый формат даты".Length));
-                Console.SetCursorPosition(52, 10);
-                Console.Write(new string(' ', passwordRegistrationUser.Length));
-
-                Console.SetCursorPosition(52, 10);
-                passwordRegistrationUser = Console.ReadLine();
+                Auxiliary.AuxiliaryLog(text, passwordRegistrationUser, cursorPositionInput, CursorPositionNotify, cursorNotifyAndInput);
             }
-
             string passwordEncrypt = aesEncryption.Encrypt(passwordRegistrationUser);
             DateTime correctData = DataCorrectness.ConvertToDate(dateBirthRegistrationUser);
             isRegistration = authenticationManager.RegisterUser(loginRegistrationUser, passwordEncrypt, correctData);
@@ -458,6 +428,9 @@ namespace UserInterfaseMenuNamespace
 
         private void SettingsAccount()
         {
+            string text = string.Empty;
+            int cursorPositionInput, CursorPositionNotify, cursorNotifyAndInput;
+
             Console.Clear();
             Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
             Console.WriteLine("\t\t\t\t║                                                       ║");
@@ -495,24 +468,20 @@ namespace UserInterfaseMenuNamespace
                         Console.WriteLine("\t\t\t\t║                                                       ║");
                         Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
 
-                        Console.SetCursorPosition(58, 6);
+
+                        text = "Недопустимый формат пароля";
+                        cursorPositionInput = 58;
+                        CursorPositionNotify = 90;
+                        cursorNotifyAndInput = 6;
+
+                        Console.SetCursorPosition(cursorPositionInput, cursorNotifyAndInput);
                         string newPassword = Console.ReadLine();
 
                         bool isCOrrect = DataCorrectness.isCheckPassword(newPassword);
 
                         while (!DataCorrectness.isCheckPassword(newPassword))
                         {
-                            Console.SetCursorPosition(90, 6);
-                            Console.Write("Недопустимый формат пароля");
-                            System.Threading.Thread.Sleep(1000);
-
-                            Console.SetCursorPosition(90, 6);
-                            Console.Write(new string(' ', "Недопустимый формат пароля".Length));
-                            Console.SetCursorPosition(58, 6);
-                            Console.Write(new string(' ', newPassword.Length));
-
-                            Console.SetCursorPosition(58, 6);
-                            newPassword = Console.ReadLine();
+                            Auxiliary.AuxiliaryLog(text, newPassword, cursorPositionInput, CursorPositionNotify, cursorNotifyAndInput);
                         }
                         string NewPasswordEncrypt = aesEncryption.Encrypt(newPassword);
                         string json = File.ReadAllText("UserData.json");

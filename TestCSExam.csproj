@@ -52,6 +52,7 @@
     <Compile Include="AESCrypt\AesEncryption.cs" />
     <Compile Include="FileManager\LoadData.cs" />
     <Compile Include="FileManager\QuizSerializer.cs" />
+    <Compile Include="Menu\Auxiliary.cs" />
     <Compile Include="Menu\UserInterfaseMenu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
