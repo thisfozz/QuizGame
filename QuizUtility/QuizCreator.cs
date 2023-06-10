@@ -51,6 +51,7 @@ namespace QuizNamespace
                     answers.Add(answer, isCorrectAnswer);
                 }
                 quiz.Add(question, answers);
+                Console.Clear();
             }
 
             Console.WriteLine("Введите название файла для сохранения викторины:");

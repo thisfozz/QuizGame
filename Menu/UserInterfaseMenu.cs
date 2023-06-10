@@ -9,6 +9,10 @@ using QuizSerializerNamespace;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using Newtonsoft.Json.Linq;
+using System.IO;
+using UserDataNamespace;
+using Newtonsoft.Json;
 
 namespace UserInterfaseMenuNamespace
 {
@@ -85,9 +89,8 @@ namespace UserInterfaseMenuNamespace
                 {
                     Console.SetCursorPosition(90, 6);
                     Console.Write("Недопустимый формат логина");
-                    System.Threading.Thread.Sleep(1000); // Приостановка на 1 секунду
+                    Thread.Sleep(1000);
 
-                    // Очистить сообщение об ошибке и поле ввода
                     Console.SetCursorPosition(90, 6);
                     Console.Write(new string(' ', "Недопустимый формат логина".Length));
                     Console.SetCursorPosition(52, 6);
@@ -104,9 +107,8 @@ namespace UserInterfaseMenuNamespace
                 {
                     Console.SetCursorPosition(90, 8);
                     Console.Write("Недопустимый формат пароля");
-                    System.Threading.Thread.Sleep(1000); // Приостановка на 1 секунду
+                    Thread.Sleep(1000);
 
-                    // Очистить сообщение об ошибке и поле ввода
                     Console.SetCursorPosition(90, 8);
                     Console.Write(new string(' ', "Недопустимый формат пароля".Length));
                     Console.SetCursorPosition(53, 8);
@@ -142,7 +144,7 @@ namespace UserInterfaseMenuNamespace
                     Console.Clear();
                     Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════════╗");
                     Console.WriteLine("\t\t\t\t║                                                           ║");
-                    Console.WriteLine($"\t\t\t\t║                {message}                    ║");
+                    Console.WriteLine($"\t\t\t\t║              {message}                  ║");
                     Console.WriteLine("\t\t\t\t║                                                           ║");
                     Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════════╝");
                     Thread.Sleep(1000);
@@ -206,9 +208,8 @@ namespace UserInterfaseMenuNamespace
             {
                 Console.SetCursorPosition(90, 6);
                 Console.Write("Недопустимый формат логина");
-                System.Threading.Thread.Sleep(1000); // Приостановка на 1 секунду
+                System.Threading.Thread.Sleep(1000);
 
-                // Очистить сообщение об ошибке и поле ввода
                 Console.SetCursorPosition(90, 6);
                 Console.Write(new string(' ', "Недопустимый формат логина".Length));
                 Console.SetCursorPosition(44, 6);
@@ -225,9 +226,8 @@ namespace UserInterfaseMenuNamespace
             {
                 Console.SetCursorPosition(90, 8);
                 Console.Write("Недопустимый формат пароля");
-                System.Threading.Thread.Sleep(1000); // Приостановка на 1 секунду
+                System.Threading.Thread.Sleep(1000);
 
-                // Очистить сообщение об ошибке и поле ввода
                 Console.SetCursorPosition(90, 8);
                 Console.Write(new string(' ', "Недопустимый формат пароля".Length));
                 Console.SetCursorPosition(45, 8);
@@ -319,11 +319,11 @@ namespace UserInterfaseMenuNamespace
             foreach (var question in quizHistory)
             {
 
-                Console.WriteLine("\t\t╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗");
-                Console.WriteLine("\t\t║                                                                                                              ║");
-                Console.WriteLine($"\t\t║Вопрос {question.Key}                                                                                        ║");
-                Console.WriteLine("\t\t║                                                                                                              ║");
-                Console.WriteLine("\t\t╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
+                Console.WriteLine("╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗");
+                Console.WriteLine("║                                                                                                              ");
+                Console.WriteLine($"║Вопрос {question.Key}                                                                                        ");
+                Console.WriteLine("║                                                                                                              ");
+                Console.WriteLine("╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
 
                 int optionAnswer = 1;
                 foreach (var answer in question.Value)
@@ -457,6 +457,94 @@ namespace UserInterfaseMenuNamespace
             }
         }
 
+        private void SettingsAccount()
+        {
+            Console.Clear();
+            Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t║                     Настройки                         ║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t╠═══════════════════════════════════════════════════════║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t║   1. Поменять пароль                                  ║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t║   2. Изменить дату рождения                           ║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+
+            ConsoleKeyInfo keyInfo;
+
+            bool validArgument = false;
+
+            while(!validArgument)
+            {
+                keyInfo = Console.ReadKey();
+
+                if(keyInfo.Key >= ConsoleKey.D1 && keyInfo.Key <= ConsoleKey.D2)
+                {
+                    validArgument = true;
+                    if(keyInfo.Key == ConsoleKey.D1)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
+                        Console.WriteLine("\t\t\t\t║                                                       ║");
+                        Console.WriteLine("\t\t\t\t║                     Настройки                         ║");
+                        Console.WriteLine("\t\t\t\t║                                                       ║");
+                        Console.WriteLine("\t\t\t\t╠═══════════════════════════════════════════════════════║");
+                        Console.WriteLine("\t\t\t\t║                                                       ║");
+                        Console.WriteLine("\t\t\t\t║   Введите новый пароль:                               ║");
+                        Console.WriteLine("\t\t\t\t║                                                       ║");
+                        Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+
+                        Console.SetCursorPosition(58, 6);
+                        string newPassword = Console.ReadLine();
+
+                        bool isCOrrect = DataCorrectness.isCheckPassword(newPassword);
+
+                        while (!DataCorrectness.isCheckPassword(newPassword))
+                        {
+                            Console.SetCursorPosition(90, 6);
+                            Console.Write("Недопустимый формат пароля");
+                            System.Threading.Thread.Sleep(1000);
+
+                            Console.SetCursorPosition(90, 6);
+                            Console.Write(new string(' ', "Недопустимый формат пароля".Length));
+                            Console.SetCursorPosition(58, 6);
+                            Console.Write(new string(' ', newPassword.Length));
+
+                            Console.SetCursorPosition(58, 6);
+                            newPassword = Console.ReadLine();
+                        }
+                        string NewPasswordEncrypt = aesEncryption.Encrypt(newPassword);
+                        string json = File.ReadAllText("UserData.json");
+                        JArray usersArray = JArray.Parse(json);
+
+                        JObject userToUpdate = usersArray.Children<JObject>().FirstOrDefault(user => user["Login"].ToString() == UserData.Login);
+
+                        if (userToUpdate != null)
+                        {
+                            userToUpdate["Password"] = NewPasswordEncrypt;
+                            string updatedJson = usersArray.ToString();
+                            File.WriteAllText("UserData.json", updatedJson);
+
+                            Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
+                            Console.WriteLine("\t\t\t\t║                                                       ║");
+                            Console.WriteLine("\t\t\t\t║               Пароль успешно изменен                  ║");
+                            Console.WriteLine("\t\t\t\t║                                                       ║");
+                            Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Пользователь с указанным логином не найден.");
+                        }
+                    }
+                    else
+                    {
+                        // Изменить дату
+                    }
+                }
+            }
+        }
         private void MainMenu()
         {
             Console.Clear();
@@ -500,7 +588,7 @@ namespace UserInterfaseMenuNamespace
                         //ShowTop20PlayersQuizzes();
                     } else if(keyInfo.Key == ConsoleKey.D4)
                     {
-                        //SettingsAccount();
+                        SettingsAccount();
                     }
                     else
                     {

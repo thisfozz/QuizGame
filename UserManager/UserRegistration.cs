@@ -16,7 +16,7 @@ namespace UserRegistrationNamespace
 
         private bool IsUserRegistered(string login)
         {
-            return users.Exists(l => l.Login == login);
+            return users.Exists(l => l.getLogin() == login);
         }
 
         public bool Register(string loginUser, string passwordUser, DateTime birthdate)

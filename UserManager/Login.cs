@@ -21,7 +21,7 @@ namespace UserLoginNamespace
             AesEncryption aesEncryption = new AesEncryption();
             message = string.Empty;
 
-            UserData user = registeredUsers.Find(u => u.Login == login);
+            UserData user = registeredUsers.Find(u => u.getLogin() == login);
             if (user != null)
             {
                 string decryptedPassword = aesEncryption.Decrypt(user.Password);
@@ -32,12 +32,12 @@ namespace UserLoginNamespace
                 }
                 else
                 {
-                    message = "Неверный логин или пароль.";
+                    message = "Ошибочный логин или пароль.";
                 }
             }
             else
             {
-                message = "Пользователь не найден.";
+                message = "Пользователь не был найден.";
             }
 
             return loggedIn;
