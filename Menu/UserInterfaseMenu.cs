@@ -5,6 +5,10 @@ using UserRegistrationNamespace;
 using System.Threading;
 using System.Net;
 using DataCorrectnessNamespace;
+using QuizSerializerNamespace;
+using System.Collections.Generic;
+using System.Linq;
+using System.Diagnostics;
 
 namespace UserInterfaseMenuNamespace
 {
@@ -28,15 +32,29 @@ namespace UserInterfaseMenuNamespace
             Console.WriteLine("\t\t\t\t║                                                       ║");
             Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
 
-            ConsoleKeyInfo keyInfo = Console.ReadKey();
+            ConsoleKeyInfo keyInfo;
 
-            if (keyInfo.Key == ConsoleKey.D1)
+            bool validArgument = false;
+
+            while (!validArgument)
             {
-                LoginForm();
-            }
-            else if(keyInfo.Key == ConsoleKey.D2)
-            {
-                RegistrationForm();
+                keyInfo = Console.ReadKey();
+                if (keyInfo.Key >= ConsoleKey.D1 && keyInfo.Key <= ConsoleKey.D2)
+                {
+                    if (keyInfo.Key == ConsoleKey.D1)
+                    {
+                        LoginForm();
+                    }
+                    else if (keyInfo.Key == ConsoleKey.D2)
+                    {
+                        RegistrationForm();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("\nНекорректный выбор. Повторите ввод.");
+
+                }
             }
         }
         private void LoginForm()
@@ -106,11 +124,11 @@ namespace UserInterfaseMenuNamespace
                 {
                     isCorrectData = true;
                     Console.Clear();
-                    Console.WriteLine("\t\t\t\t ╔═══════════════════════════════════════════════════════╗");
-                    Console.WriteLine("\t\t\t\t ║                                                       ║");
-                    Console.WriteLine($"\t\t\t\t ║                {message}                 ║");
-                    Console.WriteLine("\t\t\t\t ║                                                       ║");
-                    Console.WriteLine("\t\t\t\t ╚═══════════════════════════════════════════════════════╝");
+                    Console.WriteLine("\t\t\t\t╔════════════════════════════════════════════════════════════╗");
+                    Console.WriteLine("\t\t\t\t║                                                            ║");
+                    Console.WriteLine($"\t\t\t\t║                {message}                      ║");
+                    Console.WriteLine("\t\t\t\t║                                                            ║");
+                    Console.WriteLine("\t\t\t\t╚════════════════════════════════════════════════════════════╝");
 
                     Thread.Sleep(2000);
 
@@ -122,11 +140,11 @@ namespace UserInterfaseMenuNamespace
                 {
                     LoginAttempt++;
                     Console.Clear();
-                    Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
-                    Console.WriteLine("\t\t\t\t║                                                       ║");
-                    Console.WriteLine($"\t\t\t\t║              {message}                  ║");
-                    Console.WriteLine("\t\t\t\t║                                                       ║");
-                    Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+                    Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════════╗");
+                    Console.WriteLine("\t\t\t\t║                                                           ║");
+                    Console.WriteLine($"\t\t\t\t║                {message}                    ║");
+                    Console.WriteLine("\t\t\t\t║                                                           ║");
+                    Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════════╝");
                     Thread.Sleep(1000);
 
                     Console.Clear();
@@ -161,7 +179,6 @@ namespace UserInterfaseMenuNamespace
                 }
             } while (!isCorrectData);
         }
-
         private void RegistrationForm()
         {
             Console.Clear();
@@ -251,6 +268,7 @@ namespace UserInterfaseMenuNamespace
                 Console.WriteLine("\t\t\t\t║             Регистрация прошла успешно                ║");
                 Console.WriteLine("\t\t\t\t║                                                       ║");
                 Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+                Thread.Sleep(2000);
                 MainMenu();
             }
             else
@@ -261,6 +279,181 @@ namespace UserInterfaseMenuNamespace
                 Console.WriteLine("\t\t\t\t║   Пользователь с таким логином уже зарегистрирован    ║");
                 Console.WriteLine("\t\t\t\t║                                                       ║");
                 Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+            }
+        }
+
+        private void HistoryQuiz()
+        {
+            string HistoryQuizFilePath = "History.json";
+
+            QuizSerializer quizSerializer = new QuizSerializer();
+
+            Dictionary<string, Dictionary<string, bool>> quizHistory = quizSerializer.DeserializeQuiz(HistoryQuizFilePath);
+
+            if (quizHistory.Count == 0)
+            {
+                Console.WriteLine("Не удалось загрузить викторину.");
+                Thread.Sleep(1500);
+                StartNewGame();
+            }
+
+            int correctAnswers = 0;
+            int totalQuestions = quizHistory.Count;
+
+            Console.Clear();
+
+            Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t║               Добро пожаловать в викторину!           ║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t╠═══════════════════════════════════════════════════════╣");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t║             Ответьте на следующие вопросы:            ║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+
+            Console.Clear();
+
+            ConsoleKeyInfo keyInfo;
+
+            foreach (var question in quizHistory)
+            {
+
+                Console.WriteLine("\t\t╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗");
+                Console.WriteLine("\t\t║                                                                                                              ║");
+                Console.WriteLine($"\t\t║Вопрос {question.Key}                                                                                        ║");
+                Console.WriteLine("\t\t║                                                                                                              ║");
+                Console.WriteLine("\t\t╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
+
+                int optionAnswer = 1;
+                foreach (var answer in question.Value)
+                {
+                    Console.WriteLine($"  {optionAnswer}. {answer.Key}");
+                    optionAnswer++;
+                }
+
+                //ConsoleKeyInfo keyInfo;
+                bool validArgument = false;
+
+                while (!validArgument)
+                {
+                    keyInfo = Console.ReadKey();
+
+                    if (keyInfo.Key >= ConsoleKey.D1 && keyInfo.Key <= ConsoleKey.D4)
+                    {
+                        validArgument = true;
+                        int selectedOptionIndex = keyInfo.Key - ConsoleKey.D1;
+                        var selectedOption = question.Value.ElementAt(selectedOptionIndex);
+                        if (selectedOption.Value)
+                        {
+                            correctAnswers++;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Некорректный выбор. Повторите ввод.");
+                    }
+                }
+                //Thread.Sleep(500);
+                Console.Clear();
+            }
+
+            Console.WriteLine("╔═══════════════════════════════════════════════════════╗");
+            Console.WriteLine($"║  Викторина завершена!                                 ║");
+            Console.WriteLine($"║  Правильных ответов: {correctAnswers} из {totalQuestions}                           ║");
+            Console.WriteLine("╚═══════════════════════════════════════════════════════╝");
+
+            Thread.Sleep(3000);
+            Console.Clear();
+
+            Console.WriteLine();
+            Console.WriteLine("Для выхода в меню нажмите 1 на клавиатуре, для выхода из программы нажмите 0: ");
+
+            keyInfo = Console.ReadKey();
+
+            if(keyInfo.Key == ConsoleKey.D1)
+            {
+                MainMenu();
+            }
+            else
+            {
+                Environment.Exit(0);
+            }
+        }
+
+        private void GeographyQuiz()
+        {
+            // Code...
+        }
+
+        private void BiologyQuiz()
+        {
+            // Code...
+        }
+
+        private void LoadingMyQuizz()
+        {
+            // Code...
+        }
+
+        private void StartNewGame()
+        {
+            Console.Clear();
+
+            Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t║                   Выберите тему                       ║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t╠═══════════════════════════════════════════════════════║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t║   1. История                                          ║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t║   2. География                                        ║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t║   3. Биология                                         ║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t║   4. Загрузить свою игру                              ║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t║   5. Назад                                            ║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+
+            ConsoleKeyInfo keyInfo;
+
+            bool validArgument = false;
+
+            while (!validArgument)
+            {
+                keyInfo = Console.ReadKey();
+
+                if (keyInfo.Key >= ConsoleKey.D1 && keyInfo.Key <= ConsoleKey.D5)
+                {
+                    validArgument = true;
+                    if (keyInfo.Key == ConsoleKey.D1)
+                    {
+                        HistoryQuiz();
+                    }
+                    else if (keyInfo.Key == ConsoleKey.D2)
+                    {
+                        GeographyQuiz();
+                    }
+                    else if (keyInfo.Key == ConsoleKey.D3)
+                    {
+                        BiologyQuiz();
+                    }
+                    else if (keyInfo.Key == ConsoleKey.D4)
+                    {
+                        LoadingMyQuizz();
+                    }
+                    else if (keyInfo.Key == ConsoleKey.D5)
+                    {
+                        MainMenu();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Некорректный выбор. Повторите ввод.");
+                }
             }
         }
 
@@ -284,7 +477,43 @@ namespace UserInterfaseMenuNamespace
             Console.WriteLine("\t\t\t\t║   5. Выход                                            ║");
             Console.WriteLine("\t\t\t\t║                                                       ║");
             Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+
+            ConsoleKeyInfo keyInfo;
+
+            bool validArgument = false;
+
+            while (!validArgument)
+            {
+                keyInfo = Console.ReadKey();
+
+                if (keyInfo.Key >= ConsoleKey.D1 && keyInfo.Key <= ConsoleKey.D5)
+                {
+                    validArgument = true;
+                    if (keyInfo.Key == ConsoleKey.D1)
+                    {
+                        StartNewGame();
+                    }else if(keyInfo.Key == ConsoleKey.D2)
+                    {
+                        // ShowTopMyQuizzes();
+                    } else if(keyInfo.Key == ConsoleKey.D3)
+                    {
+                        //ShowTop20PlayersQuizzes();
+                    } else if(keyInfo.Key == ConsoleKey.D4)
+                    {
+                        //SettingsAccount();
+                    }
+                    else
+                    {
+                        Environment.Exit(0);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Некорректный выбор. Повторите ввод.");
+                }
+            }
         }
+
         public void Start()
         {
             AuthorizationForm();

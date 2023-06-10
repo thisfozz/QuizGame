@@ -51,9 +51,11 @@
   <ItemGroup>
     <Compile Include="AESCrypt\AesEncryption.cs" />
     <Compile Include="FileManager\LoadData.cs" />
+    <Compile Include="FileManager\QuizSerializer.cs" />
     <Compile Include="Menu\UserInterfaseMenu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuizUtility\QuizCreator.cs" />
     <Compile Include="UserInformations\UserData.cs" />
     <Compile Include="UserManager\DataCorrectness.cs" />
     <Compile Include="UserManager\Login.cs" />

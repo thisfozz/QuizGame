@@ -32,7 +32,7 @@ namespace UserLoginNamespace
                 }
                 else
                 {
-                    message = "Неверный логин или пароль. Повторите попытку.";
+                    message = "Неверный логин или пароль.";
                 }
             }
             else
