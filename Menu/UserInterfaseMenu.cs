@@ -118,25 +118,18 @@ namespace UserInterfaseMenuNamespace
                 Console.WriteLine("Некорректный ввод");
             }
         }
-
-        // Дописать
         private void GeographyQuiz()
         {
             // Code...
         }
-
-        // Дописать
         private void BiologyQuiz()
         {
             // Code...
         }
-
-        // Дописать
         private void LoadingMyQuizz()
         {
             // Code...
         }
-
         private void AuthorizationForm()
         {
             Console.Clear();
@@ -181,6 +174,21 @@ namespace UserInterfaseMenuNamespace
                 }
             }
         }
+        private void LoginFormMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t║                     Авторизация                       ║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t╠═══════════════════════════════════════════════════════║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t║    Введите логин:                                     ║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t║    Введите пароль:                                    ║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+        }
         private void LoginForm()
         {
             Console.Clear();
@@ -191,17 +199,7 @@ namespace UserInterfaseMenuNamespace
 
             do
             {
-                Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
-                Console.WriteLine("\t\t\t\t║                                                       ║");
-                Console.WriteLine("\t\t\t\t║                     Авторизация                       ║");
-                Console.WriteLine("\t\t\t\t║                                                       ║");
-                Console.WriteLine("\t\t\t\t╠═══════════════════════════════════════════════════════║");
-                Console.WriteLine("\t\t\t\t║                                                       ║");
-                Console.WriteLine("\t\t\t\t║    Введите логин:                                     ║");
-                Console.WriteLine("\t\t\t\t║                                                       ║");
-                Console.WriteLine("\t\t\t\t║    Введите пароль:                                    ║");
-                Console.WriteLine("\t\t\t\t║                                                       ║");
-                Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+                LoginFormMenu();
 
                 text = "Недопустимый формат логина";
                 cursorPositionInput = 52;
@@ -214,7 +212,6 @@ namespace UserInterfaseMenuNamespace
                 {
                     //if(!Auxiliary.AuxiliaryLog(text, loginAuthUser, cursorPositionInput, CursorPositionNotify, cursorNotifyAndInput));
                 }
-
 
                 text = "Недопустимый формат пароля";
                 cursorPositionInput = 53;
@@ -321,7 +318,7 @@ namespace UserInterfaseMenuNamespace
             string loginRegistrationUser = Console.ReadLine();
             while (!DataCorrectness.isCheckLogin(loginRegistrationUser))
             {
-                Auxiliary.AuxiliaryLog(text, loginRegistrationUser, cursorPositionInput, CursorPositionNotify, cursorNotifyAndInput);
+                //Auxiliary.AuxiliaryLog(text, loginRegistrationUser, cursorPositionInput, CursorPositionNotify, cursorNotifyAndInput);
             }
 
 
@@ -346,7 +343,7 @@ namespace UserInterfaseMenuNamespace
             string dateBirthRegistrationUser = Console.ReadLine();
             while (!DataCorrectness.IsCheckDate(dateBirthRegistrationUser))
             {
-                Auxiliary.AuxiliaryLog(text, passwordRegistrationUser, cursorPositionInput, CursorPositionNotify, cursorNotifyAndInput);
+                //Auxiliary.AuxiliaryLog(text, passwordRegistrationUser, cursorPositionInput, CursorPositionNotify, cursorNotifyAndInput);
             }
             DateTime correctData = DataCorrectness.ConvertToDate(dateBirthRegistrationUser);
             isRegistration = authenticationManager.RegisterUser(loginRegistrationUser, passwordEncrypt, correctData);
@@ -448,6 +445,8 @@ namespace UserInterfaseMenuNamespace
             Console.WriteLine("\t\t\t\t║                                                       ║");
             Console.WriteLine("\t\t\t\t║   2. Изменить дату рождения                           ║");
             Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t║   3. Вернуться назад                                  ║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
             Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
 
             ConsoleKeyInfo keyInfo;
@@ -458,7 +457,7 @@ namespace UserInterfaseMenuNamespace
             {
                 keyInfo = Console.ReadKey();
 
-                if(keyInfo.Key >= ConsoleKey.D1 && keyInfo.Key <= ConsoleKey.D2)
+                if(keyInfo.Key >= ConsoleKey.D1 && keyInfo.Key <= ConsoleKey.D3)
                 {
                     validArgument = true;
                     if(keyInfo.Key == ConsoleKey.D1)
@@ -483,12 +482,11 @@ namespace UserInterfaseMenuNamespace
                         Console.SetCursorPosition(cursorPositionInput, cursorNotifyAndInput);
                         string newPassword = Console.ReadLine();
 
-                        bool isCOrrect = DataCorrectness.isCheckPassword(newPassword);
-
                         while (!DataCorrectness.isCheckPassword(newPassword))
                         {
                             Auxiliary.AuxiliaryLog(text, newPassword, cursorPositionInput, CursorPositionNotify, cursorNotifyAndInput);
                         }
+
                         string NewPasswordEncrypt = aesEncryption.Encrypt(newPassword);
                         string json = File.ReadAllText("UserData.json");
                         JArray usersArray = JArray.Parse(json);
@@ -513,7 +511,7 @@ namespace UserInterfaseMenuNamespace
                             Console.WriteLine("Пользователь с указанным логином не найден.");
                         }
                     }
-                    else
+                    else if(keyInfo.Key == ConsoleKey.D2)
                     {
                         Console.Clear();
                         Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
@@ -535,12 +533,12 @@ namespace UserInterfaseMenuNamespace
                         Console.SetCursorPosition(cursorPositionInput, cursorNotifyAndInput);
                         string newDate = Console.ReadLine();
 
-                        bool isCOrrect = DataCorrectness.IsCheckDate(newDate);
 
                         while (!DataCorrectness.IsCheckDate(newDate))
                         {
                             Auxiliary.AuxiliaryLog(text, newDate, cursorPositionInput, CursorPositionNotify, cursorNotifyAndInput);
                         }
+
                         DateTime correctData = DataCorrectness.ConvertToDate(newDate);
 
                         string json = File.ReadAllText("UserData.json");
@@ -565,8 +563,20 @@ namespace UserInterfaseMenuNamespace
                             Console.WriteLine("Пользователь с указанным логином не найден.");
                         }
                     }
+                    else if(keyInfo.Key == ConsoleKey.D3)
+                    {
+                        MainMenu();
+                    }
                 }
             }
+        }
+        private void ShowTopMyQuizzes()
+        {
+            // Code
+        }
+        private void ShowTop20PlayersQuizzes()
+        {
+            // Code
         }
         private void MainMenu()
         {
@@ -585,7 +595,7 @@ namespace UserInterfaseMenuNamespace
             Console.WriteLine("\t\t\t\t║                                                       ║");
             Console.WriteLine("\t\t\t\t║   4. Настройки                                        ║");
             Console.WriteLine("\t\t\t\t║                                                       ║");
-            Console.WriteLine("\t\t\t\t║   5. Выход                                            ║");
+            Console.WriteLine("\t\t\t\t║   5. Выход из аккунта                                 ║");
             Console.WriteLine("\t\t\t\t║                                                       ║");
             Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
 
@@ -601,19 +611,14 @@ namespace UserInterfaseMenuNamespace
                 {
                     validArgument = true;
                     if (keyInfo.Key == ConsoleKey.D1)
-                    {
                         StartNewGame();
-                    }else if(keyInfo.Key == ConsoleKey.D2)
-                    {
-                        // ShowTopMyQuizzes();
-                    } else if(keyInfo.Key == ConsoleKey.D3)
-                    {
-                        //ShowTop20PlayersQuizzes();
-                    } else if(keyInfo.Key == ConsoleKey.D4)
-                    {
+                    else if(keyInfo.Key == ConsoleKey.D2)
+                        ShowTopMyQuizzes();
+                    else if(keyInfo.Key == ConsoleKey.D3)
+                        ShowTop20PlayersQuizzes(); 
+                    else if(keyInfo.Key == ConsoleKey.D4)
                         SettingsAccount();
-                    }
-                    else
+                    else if(keyInfo.Key == ConsoleKey.D5)
                     {
                         authenticationManager.LogoutUser();
                         AuthorizationForm();
