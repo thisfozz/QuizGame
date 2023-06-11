@@ -22,10 +22,7 @@ namespace QuizNamespace
                 Console.WriteLine("Введите вопрос (или введите 'save' для завершения и сохранения викторины):");
                 string question = Console.ReadLine();
 
-                if(question == "save")
-                {
-                    break;
-                }
+                if (question == "save") break;
 
                 Dictionary<string, bool> answers = new Dictionary<string, bool>();
 
@@ -36,22 +33,20 @@ namespace QuizNamespace
                     Console.Write("Введите ответ: ");
                     string answer = Console.ReadLine();
 
-                    if(answer == "save")
-                    {
-                        break;
-                    }
+                    if (answer == "save") break;
+
                     Console.WriteLine("Это правильный ответ? введите да или нет");
                     string isCorrectInput = Console.ReadLine();
                     bool isCorrectAnswer = isCorrectInput.ToLower() == "да";
 
-
                     answers.Add(answer, isCorrectAnswer);
                 }
+
                 quiz.Add(question, answers);
                 Console.Clear();
             }
 
-            Console.WriteLine("Введите название файла для сохранения викторины:");
+            Console.WriteLine("Введите название файла для сохранения викторины: ");
             string fileName = Console.ReadLine();
             string filePath = $"{fileName}.json";
 

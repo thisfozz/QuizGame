@@ -86,10 +86,13 @@ namespace UserInterfaseMenuNamespace
                 Console.Clear();
             }
 
-            Console.WriteLine("╔═══════════════════════════════════════════════════════╗");
-            Console.WriteLine($"║  Викторина завершена!                                 ║");
-            Console.WriteLine($"║  Правильных ответов: {correctAnswers} из {totalQuestions}                           ║");
-            Console.WriteLine("╚═══════════════════════════════════════════════════════╝");
+            Console.WriteLine("╔════════════════════════════════════════════════════════════════════════════════════════════");
+            Console.WriteLine("║                                                                                            ");
+            Console.WriteLine("║  Викторина завершена!                                                                      ");
+            Console.WriteLine("║                                                                                            ");
+            Console.WriteLine($"║ Правильных ответов: {correctAnswers} из {totalQuestions}");
+            Console.WriteLine("║                                                                                            ");
+            Console.WriteLine("╚════════════════════════════════════════════════════════════════════════════════════════════");
 
             Thread.Sleep(3000);
             Console.Clear();
@@ -175,7 +178,6 @@ namespace UserInterfaseMenuNamespace
                 else
                 {
                     Console.WriteLine("\nНекорректный выбор. Повторите ввод.");
-
                 }
             }
         }
@@ -238,7 +240,6 @@ namespace UserInterfaseMenuNamespace
                     Console.WriteLine("\t\t\t\t╚════════════════════════════════════════════════════════════╝");
 
                     Thread.Sleep(2000);
-
                     Console.Clear();
 
                     MainMenu();
@@ -265,15 +266,18 @@ namespace UserInterfaseMenuNamespace
                         Console.WriteLine("\t\t\t\t║           Введите yes or no:                          ║");
                         Console.WriteLine("\t\t\t\t║                                                       ║");
                         Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+                        
                         Console.SetCursorPosition(63, 4);
                         text = Console.ReadLine();
-                        if (text == "yes" || text.ToUpper() == "YES")
+                        text = text.ToLower();
+
+                        if (text == "yes")
                         {
                             isCorrectData = true;
                             Console.Clear();
                             AuthorizationForm();
                         }
-                        else if (text == "no" || text.ToUpper() == "NO")
+                        else if (text == "no")
                         {
                             Console.Clear();
                             isCorrectData = false;

@@ -13,7 +13,7 @@ namespace QuizSerializerNamespace
         public void SerializeQuiz(Dictionary<string, Dictionary<string, bool>> quiz, string nameQuiz)
         {
             string json = JsonConvert.SerializeObject(quiz, Formatting.Indented);
-            System.IO.File.WriteAllText(nameQuiz, json);
+            File.WriteAllText(nameQuiz, json);
         }
 
         public Dictionary<string, Dictionary<string, bool>> DeserializeQuiz(string nameQuiz)
@@ -24,10 +24,8 @@ namespace QuizSerializerNamespace
                 var deserializedData = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, bool>>>(jsonData);
                 return deserializedData;
             }
-            else
-            {
-                return new Dictionary<string, Dictionary<string, bool>>();
-            }
+
+            return new Dictionary<string, Dictionary<string, bool>>();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using UserInterfaseMenuNamespace;
+﻿using QuizNamespace;
+using UserInterfaseMenuNamespace;
 
 namespace TestCSExam
 {

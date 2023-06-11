@@ -16,10 +16,7 @@ namespace FileManagerNamespace
             {
                 string jsonData = File.ReadAllText(FilePath);
                 var deserializedData = JsonConvert.DeserializeObject<List<UserData>>(jsonData);
-                if (deserializedData != null)
-                {
-                    return deserializedData;
-                }
+                if (deserializedData != null) return deserializedData;
             }
 
             return new List<UserData>();

@@ -16,14 +16,10 @@ namespace AuthenticationManagerNamespace
             registeredUsers = LoadData.LoadUserData();
             currentUser = null;
         }
-
         public bool RegisterUser(string loginUser, string passwordUser, DateTime birthdate)
         {
 
-            if (registeredUsers.Exists(u => u.Login == loginUser))
-            {
-                return false;
-            }
+            if (registeredUsers.Exists(u => u.Login == loginUser)) return false;
 
             UserData newUser = new UserData(loginUser, passwordUser, birthdate);
             registeredUsers.Add(newUser);
@@ -33,7 +29,6 @@ namespace AuthenticationManagerNamespace
             return true;
 
         }
-
         public bool LoginUser(string login, string password)
         {
             AesEncryption aesEncryption = new AesEncryption();
@@ -48,15 +43,12 @@ namespace AuthenticationManagerNamespace
                     return true;
                 }
             }
+
             return false;
         }
         public void LogoutUser()
         {
             currentUser = null;
-        }
-        public bool IsUserLoggedIn()
-        {
-            return currentUser != null;
         }
         public string GetLoggedInUserLogin()
         {
