@@ -29,6 +29,10 @@ namespace AuthenticationManagerNamespace
             return true;
 
         }
+        public List<UserData> GetAllRegisteredUser()
+        {
+            return registeredUsers;
+        }
         public void UpdatePassword(string login,string password)
         {
             if(currentUser != null && currentUser.Login == login)
@@ -41,17 +45,11 @@ namespace AuthenticationManagerNamespace
             AesEncryption aesEncryption = new AesEncryption();
             UserData user = registeredUsers.Find(u => u.Login == login);
 
-            if (user != null)
-            {
-                string decryptedPassword = aesEncryption.Decrypt(user.Password);
-                if (password == decryptedPassword)
-                {
-                    currentUser = user;
-                    return true;
-                }
-            }
-
-            return false;
+            if (user == null) return false;
+            string decryptedPassword = aesEncryption.Decrypt(user.Password);
+            if (password == decryptedPassword)
+                currentUser = user;
+            return true;
         }
         public void LogoutUser()
         {

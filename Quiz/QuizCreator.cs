@@ -1,19 +1,17 @@
 ﻿using QuestionQuizNamespace;
-using Newtonsoft.Json;
-using QuestionQuizNamespace;
 using QuizSerializerNamespace;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AnswerQuizNamespace;
+using System.Threading;
 
 namespace QuizCreatorNamespace
 {
     public class QuizCreator
     {
         private static readonly QuizSerializer quizSerializer = new QuizSerializer();
+
+        public static int CorrectAnswers { get; set; }
         public void CreateQuiz()
         {
             List<QuestionQuiz> quiz = new List<QuestionQuiz>();
@@ -23,20 +21,18 @@ namespace QuizCreatorNamespace
                 Console.WriteLine("Введите вопрос (или введите 'save' для завершения и сохранения викторины):");
                 string question = Console.ReadLine();
 
-                if (question == "save")
-                    break;
-
-                List<AnswerQuiz> answers = new List<AnswerQuiz>();
+                if (question == "save") break;
 
                 Console.WriteLine("Введите варианты ответов (или введите 'save' для завершения вопроса):");
+
+                List<AnswerQuiz> answers = new List<AnswerQuiz>();
 
                 while (true)
                 {
                     Console.Write("Введите ответ: ");
                     string answerText = Console.ReadLine();
 
-                    if (answerText == "save")
-                        break;
+                    if (answerText == "save") break;
 
                     Console.WriteLine("Это правильный ответ? Введите 'да' или 'нет':");
                     string isCorrectInput = Console.ReadLine();
@@ -69,6 +65,85 @@ namespace QuizCreatorNamespace
 
             Console.WriteLine($"Викторина сохранена в файле: {filePath}");
         }
+        public static bool StartQuiz(string nameQuiz)
+        {
+            string filePath = $"{nameQuiz}.json";
+            QuizSerializer quizSerializer = new QuizSerializer();
+            List<QuestionQuiz> quizHistory = quizSerializer.DeserializeQuiz(filePath);
 
+            if (quizHistory.Count == 0)
+            {
+                return false;
+            }
+
+            int totalQuestions = quizHistory.Count;
+            int counterQuestions = 0;
+
+            Console.Clear();
+            Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t║               Добро пожаловать в викторину!           ║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t╠═══════════════════════════════════════════════════════╣");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t║             Ответьте на следующие вопросы:            ║");
+            Console.WriteLine("\t\t\t\t║                                                       ║");
+            Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+            Console.Clear();
+
+            ConsoleKeyInfo keyInfo;
+
+            foreach (QuestionQuiz questionQuiz in quizHistory)
+            {
+                Console.WriteLine("╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗");
+                Console.WriteLine("║                                                                                                              ");
+                Console.WriteLine($"║Вопроc {counterQuestions++} из {totalQuestions} \n {questionQuiz.Question}                                                                                        ");
+                Console.WriteLine("║                                                                                                              ");
+                Console.WriteLine("╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
+
+                int counterAnswers = 0;
+                foreach (AnswerQuiz answer in questionQuiz.Answers)
+                {
+                    counterAnswers++;
+                    Console.WriteLine($"{counterAnswers}. {answer.Answer}");
+                }
+
+                int userAnswer = -1;
+                bool isValidAnswer = false;
+
+                while (!isValidAnswer)
+                {
+                    keyInfo = Console.ReadKey(true);
+                    if (char.IsDigit(keyInfo.KeyChar))
+                    {
+                        userAnswer = int.Parse(keyInfo.KeyChar.ToString());
+                        if (userAnswer >= 1 && userAnswer <= counterAnswers)
+                        {
+                            isValidAnswer = true;
+                        }
+                    }
+                }
+                AnswerQuiz selectedAnswer = questionQuiz.Answers[userAnswer - 1];
+                if (selectedAnswer.IsCorrectAnswer)
+                {
+                    CorrectAnswers++;
+                }
+                Console.Clear();
+            }
+
+
+            Console.WriteLine("╔════════════════════════════════════════════════════════════════════════════════════════════");
+            Console.WriteLine("║                                                                                            ");
+            Console.WriteLine("║ Викторина завершена!                                                                      ");
+            Console.WriteLine("║                                                                                            ");
+            Console.WriteLine($"║ Правильных ответов: {CorrectAnswers} из {totalQuestions}");
+            Console.WriteLine("║                                                                                            ");
+            Console.WriteLine("╚════════════════════════════════════════════════════════════════════════════════════════════");
+
+            Thread.Sleep(3000);
+            Console.Clear();
+
+            return true;
+        }
     }
 }

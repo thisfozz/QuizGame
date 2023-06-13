@@ -4,119 +4,47 @@ using System.Threading;
 using DataCorrectnessNamespace;
 using QuizSerializerNamespace;
 using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json.Linq;
-using System.IO;
 using AuxiliaryNamespace;
 using UserDataNamespace;
 using FileManagerNamespace;
 using QuestionQuizNamespace;
 using AnswerQuizNamespace;
+using QuizCreatorNamespace;
+using AuthenticationManagerNamespace;
 
 namespace UserInterfaseMenuNamespace
 {
     public class UserInterfaseMenu
     {
-        private AuthenticationManagerNamespace.AuthenticationManager authenticationManager = new();
+        private readonly AuthenticationManagerNamespace.AuthenticationManager authenticationManager = new();
         private readonly AesEncryption aesEncryption = new();
 
-        // Создать из HistoryQuiz отдельный общий метод для запуска любых викторин.
         private void HistoryQuiz()
         {
-            string historyQuizFilePath = "History.json";
+            string nameQuiz = "History";
             string quizTopic = "История";
             UserData currentUser = authenticationManager.GetCurrectUser();
-            QuizSerializer quizSerializer = new QuizSerializer();
-            List<QuestionQuiz> quizHistory = quizSerializer.DeserializeQuiz(historyQuizFilePath);
 
-            if (quizHistory.Count == 0)
+            if (QuizCreator.StartQuiz(nameQuiz))
             {
                 Console.WriteLine("Не удалось загрузить викторину.");
-                Thread.Sleep(1500);
                 StartNewGame();
             }
 
-            int correctAnswers = 0;
-            int totalQuestions = quizHistory.Count;
-            int counterQuestions = 0;
-
-            Console.Clear();
-            Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
-            Console.WriteLine("\t\t\t\t║                                                       ║");
-            Console.WriteLine("\t\t\t\t║               Добро пожаловать в викторину!           ║");
-            Console.WriteLine("\t\t\t\t║                                                       ║");
-            Console.WriteLine("\t\t\t\t╠═══════════════════════════════════════════════════════╣");
-            Console.WriteLine("\t\t\t\t║                                                       ║");
-            Console.WriteLine("\t\t\t\t║             Ответьте на следующие вопросы:            ║");
-            Console.WriteLine("\t\t\t\t║                                                       ║");
-            Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
-            Console.Clear();
-
-            ConsoleKeyInfo keyInfo;
-
-            foreach (QuestionQuiz questionQuiz in quizHistory)
-            {
-                Console.WriteLine("╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗");
-                Console.WriteLine("║                                                                                                              ");
-                Console.WriteLine($"║Вопроc {counterQuestions++} из {totalQuestions} \n {questionQuiz.Question}                                                                                        ");
-                Console.WriteLine("║                                                                                                              ");
-                Console.WriteLine("╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
-
-                int counterAnswers = 0;
-                foreach (AnswerQuiz answer in questionQuiz.Answers)
-                {
-                    counterAnswers++;
-                    Console.WriteLine($"{counterAnswers}. {answer.Answer}");
-                }
-
-                int userAnswer = -1;
-                bool isValidAnswer = false;
-
-                while (!isValidAnswer)
-                {
-                    keyInfo = Console.ReadKey(true);
-                    if (char.IsDigit(keyInfo.KeyChar))
-                    {
-                        userAnswer = int.Parse(keyInfo.KeyChar.ToString());
-                        if (userAnswer >= 1 && userAnswer <= counterAnswers)
-                        {
-                            isValidAnswer = true;
-                        }
-                    }
-                }
-                AnswerQuiz selectedAnswer = questionQuiz.Answers[userAnswer - 1];
-                if (selectedAnswer.IsCorrectAnswer)
-                {
-                    correctAnswers++;
-                }
-                Console.Clear();
-            }
-
-            Console.WriteLine("╔════════════════════════════════════════════════════════════════════════════════════════════");
-            Console.WriteLine("║                                                                                            ");
-            Console.WriteLine("║ Викторина завершена!                                                                      ");
-            Console.WriteLine("║                                                                                            ");
-            Console.WriteLine($"║ Правильных ответов: {correctAnswers} из {totalQuestions}");
-            Console.WriteLine("║                                                                                            ");
-            Console.WriteLine("╚════════════════════════════════════════════════════════════════════════════════════════════");
-
             if (currentUser.QuizResults.TryGetValue(quizTopic, out int existingScore))
             {
-                currentUser.QuizResults[quizTopic] = Math.Max(existingScore, correctAnswers);
+                currentUser.QuizResults[quizTopic] = Math.Max(existingScore, QuizCreator.CorrectAnswers);
             }
             else
             {
-                currentUser.QuizResults.Add(quizTopic, correctAnswers);
+                currentUser.QuizResults.Add(quizTopic, QuizCreator.CorrectAnswers);
             }
 
             LoadData.SaveUserDataForUser(currentUser);
 
-            Thread.Sleep(3000);
-            Console.Clear();
+            Console.WriteLine("\nДля выхода в меню нажмите 1 на клавиатуре, для выхода на окно авторизации нажмите 0: ");
 
-            Console.WriteLine();
-            Console.WriteLine("Для выхода в меню нажмите 1 на клавиатуре, для выхода на окно авторизации нажмите 0: ");
-
+            ConsoleKeyInfo keyInfo;
             keyInfo = Console.ReadKey();
 
             if (keyInfo.Key <= ConsoleKey.D1 && keyInfo.Key >= ConsoleKey.D0)
@@ -130,23 +58,22 @@ namespace UserInterfaseMenuNamespace
                     AuthorizationForm();
                 }
             }
-            else
-            {
-                Console.WriteLine("Некорректный ввод");
-            }
         }
-
         private void GeographyQuiz()
         {
-            //string GeographyQuizFilePath = "Geography.json";
-            //string quizTopic = "История";
-            //UserData currentUser = authenticationManager.GetCurrectUser();
-            //QuizSerializer quizSerializer = new QuizSerializer();
-            //Dictionary<string, AnswerQuiz> quizHistory = quizSerializer.DeserializeQuiz(GeographyQuizFilePath);
+            string geographyQuizFilePath = "Geography.json";
+            string quizTopic = "География";
+            UserData currentUser = authenticationManager.GetCurrectUser();
+            QuizSerializer quizSerializer = new QuizSerializer();
+            List<QuestionQuiz> quizHistory = quizSerializer.DeserializeQuiz(geographyQuizFilePath);
         }
         private void BiologyQuiz()
         {
-            // Code...
+            string biologyQuizFilePath = "Biology.json";
+            string quizTopic = "Биология";
+            UserData currentUser = authenticationManager.GetCurrectUser();
+            QuizSerializer quizSerializer = new QuizSerializer();
+            List<QuestionQuiz> quizHistory = quizSerializer.DeserializeQuiz(biologyQuizFilePath);
         }
         private void LoadingMyQuizz()
         {
@@ -312,7 +239,7 @@ namespace UserInterfaseMenuNamespace
         private void RegistrationForm()
         {
 
-            int cursorPositionInput, CursorPositionNotify, cursorNotifyAndInput;
+            int cursorPositionInput, cursorNotifyAndInput;
 
             Console.Clear();
             Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
@@ -359,7 +286,6 @@ namespace UserInterfaseMenuNamespace
 
             text = "Недопустимый формат даты";
             cursorPositionInput = 52;
-            CursorPositionNotify = 90;
             cursorNotifyAndInput = 10;
             Console.SetCursorPosition(cursorPositionInput, cursorNotifyAndInput);
             string dateBirthRegistrationUser = Console.ReadLine();
@@ -435,7 +361,7 @@ namespace UserInterfaseMenuNamespace
                     }
                     else if (keyInfo.Key == ConsoleKey.D3)
                     {
-                        BiologyQuiz();
+                        //BiologyQuiz();
                     }
                     else if (keyInfo.Key == ConsoleKey.D4)
                     {
@@ -627,7 +553,37 @@ namespace UserInterfaseMenuNamespace
         }
         private void ShowTop20PlayersQuizzes()
         {
-            // Code
+            AuthenticationManager authenticationManager = new AuthenticationManager();
+            var AllRegisteredUser = authenticationManager.GetAllRegisteredUser();
+
+            Console.Clear();
+            foreach (var user in AllRegisteredUser)
+            {
+                int totalCountQuizResults = 0;
+                foreach (var item in user.QuizResults.Values)
+                {
+                    totalCountQuizResults += item;
+                }
+                //Console.Clear();
+                Console.WriteLine("╔══════════════════════════════════════════════════════╗");
+                Console.WriteLine("║                                                      ║");
+                Console.WriteLine($"║ Login User: {user.Login}                            ");                         
+                Console.WriteLine($"║ Total Score: {totalCountQuizResults}                ");
+                Console.WriteLine("║                                                      ║");
+                Console.WriteLine("╚══════════════════════════════════════════════════════╝");
+            }
+            Console.WriteLine("\n\nНажмите 1 чтобы вернуться назад");
+            ConsoleKeyInfo keyInfo;
+            bool isValidArgument = false;
+            while (!isValidArgument)
+            {
+                keyInfo = Console.ReadKey();
+                if (keyInfo.Key == ConsoleKey.D1)
+                {
+                    isValidArgument = true;
+                    MainMenu();
+                }
+            }
         }
         private void MainMenu()
         {
