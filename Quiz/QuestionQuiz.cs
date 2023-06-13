@@ -8,5 +8,4 @@ namespace QuestionQuizNamespace
         public string Question { get; set; }
         public List<AnswerQuiz> Answers { get; set; }
     }
-
 }

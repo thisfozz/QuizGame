@@ -20,6 +20,7 @@ namespace UserInterfaseMenuNamespace
         private AuthenticationManagerNamespace.AuthenticationManager authenticationManager = new();
         private readonly AesEncryption aesEncryption = new();
 
+        // Создать из HistoryQuiz отдельный общий метод для запуска любых викторин.
         private void HistoryQuiz()
         {
             string historyQuizFilePath = "History.json";

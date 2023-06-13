@@ -30,10 +30,5 @@ namespace AuxiliaryNamespace
             Console.WriteLine("\t\t\t\t║                                                       ║");
             Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
         }
-
-        public static void QuizzStart(string nameQuiz)
-        {
-
-        }
     }
 }
