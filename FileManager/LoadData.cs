@@ -26,5 +26,16 @@ namespace FileManagerNamespace
             string jsonData = JsonConvert.SerializeObject(users, Formatting.Indented);
             File.WriteAllText(FilePath, jsonData);
         }
+
+        public static void SaveUserDataForUser(UserData user)
+        {
+            List<UserData> users = LoadUserData();
+            int index = users.FindIndex(u => u.Login == user.Login);
+            if (index >= 0)
+            {
+                users[index] = user;
+                SaveUserData(users);
+            }
+        }
     }
 }

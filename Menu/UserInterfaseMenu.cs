@@ -8,6 +8,8 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using AuxiliaryNamespace;
+using UserDataNamespace;
+using FileManagerNamespace;
 
 namespace UserInterfaseMenuNamespace
 {
@@ -19,9 +21,9 @@ namespace UserInterfaseMenuNamespace
         private void HistoryQuiz()
         {
             string HistoryQuizFilePath = "History.json";
-
+            string quizTopic = "История";
+            UserData currentUser = authenticationManager.GetCurrectUser();
             QuizSerializer quizSerializer = new QuizSerializer();
-
             Dictionary<string, Dictionary<string, bool>> quizHistory = quizSerializer.DeserializeQuiz(HistoryQuizFilePath);
 
             if (quizHistory.Count == 0)
@@ -93,6 +95,17 @@ namespace UserInterfaseMenuNamespace
             Console.WriteLine($"║ Правильных ответов: {correctAnswers} из {totalQuestions}");
             Console.WriteLine("║                                                                                            ");
             Console.WriteLine("╚════════════════════════════════════════════════════════════════════════════════════════════");
+
+            if (currentUser.QuizResults.TryGetValue(quizTopic, out int existingScore))
+            {
+                currentUser.QuizResults[quizTopic] = Math.Max(existingScore, correctAnswers);
+            }
+            else
+            {
+                currentUser.QuizResults.Add(quizTopic, correctAnswers);
+            }
+
+            LoadData.SaveUserDataForUser(currentUser);
 
             Thread.Sleep(3000);
             Console.Clear();
@@ -232,7 +245,7 @@ namespace UserInterfaseMenuNamespace
                     Console.Clear();
                     Console.WriteLine("\t\t\t\t╔════════════════════════════════════════════════════════════╗");
                     Console.WriteLine("\t\t\t\t║                                                            ║");
-                    Console.WriteLine($"\t\t\t\t║           Авторизация прошла успешно                       ║");
+                    Console.WriteLine($"\t\t\t\t║              Авторизация прошла успешно                    ║");
                     Console.WriteLine("\t\t\t\t║                                                            ║");
                     Console.WriteLine("\t\t\t\t╚════════════════════════════════════════════════════════════╝");
 
@@ -572,7 +585,30 @@ namespace UserInterfaseMenuNamespace
         }
         private void ShowTopMyQuizzes()
         {
-            // Code
+            Console.Clear();
+            UserData currentUser = authenticationManager.GetCurrectUser();
+
+            Dictionary<string, int> myQuizzResult = new Dictionary<string, int>();
+
+            myQuizzResult = currentUser.QuizResults;
+
+            foreach (var item in myQuizzResult)
+            {
+                Console.WriteLine($"Тема: {item.Key} | Максимальное количество очков: {item.Value}");
+            }
+            Console.WriteLine("\n Для выхода назад нажмите 1");
+            ConsoleKeyInfo keyInfo;
+
+            while (true)
+            {
+                keyInfo = Console.ReadKey();
+                if (keyInfo.Key == ConsoleKey.D1)
+                {
+                    break;
+                }
+            }
+            MainMenu();
+
         }
         private void ShowTop20PlayersQuizzes()
         {

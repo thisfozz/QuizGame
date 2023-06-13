@@ -54,5 +54,9 @@ namespace AuthenticationManagerNamespace
         {
             return currentUser?.Login;
         }
+        public UserData GetCurrectUser()
+        {
+            return currentUser;
+        }
     }
 }
