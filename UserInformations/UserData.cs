@@ -16,7 +16,7 @@ namespace UserDataNamespace
         {
             this.Login = Login;
             this.Password = Password;
-            this.DateOfBirth = DateOfBirth;
+            this.DateOfBirth = DateOfBirth.Date;
             QuizResults = new Dictionary<string, int>();
         }
     }

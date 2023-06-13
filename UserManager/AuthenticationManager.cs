@@ -29,6 +29,13 @@ namespace AuthenticationManagerNamespace
             return true;
 
         }
+        public void UpdatePassword(string login,string password)
+        {
+            if(currentUser != null && currentUser.Login == login)
+            {
+                currentUser.Password = password;
+            }
+        }
         public bool LoginUser(string login, string password)
         {
             AesEncryption aesEncryption = new AesEncryption();

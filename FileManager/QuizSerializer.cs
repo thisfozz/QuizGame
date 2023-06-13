@@ -6,10 +6,6 @@ namespace QuizSerializerNamespace
 {
     public class QuizSerializer
     {
-        // private string HistoryQuizFilePath = "HistoryQuiz.json";
-        // private string GeographyQuizFilePath = "GeographyQuiz.json";
-        // private string CSharpQuizFilePath = "CSharpQuiz.json";
-
         public void SerializeQuiz(Dictionary<string, Dictionary<string, bool>> quiz, string nameQuiz)
         {
             string json = JsonConvert.SerializeObject(quiz, Formatting.Indented);
