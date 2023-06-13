@@ -10,21 +10,23 @@ using System.IO;
 using AuxiliaryNamespace;
 using UserDataNamespace;
 using FileManagerNamespace;
+using QuestionQuizNamespace;
+using AnswerQuizNamespace;
 
 namespace UserInterfaseMenuNamespace
 {
     public class UserInterfaseMenu
     {
-        private AuthenticationManagerNamespace.AuthenticationManager authenticationManager = new AuthenticationManagerNamespace.AuthenticationManager();
-        private AesEncryption aesEncryption = new AesEncryption();
+        private AuthenticationManagerNamespace.AuthenticationManager authenticationManager = new();
+        private readonly AesEncryption aesEncryption = new();
 
         private void HistoryQuiz()
         {
-            string HistoryQuizFilePath = "History.json";
+            string historyQuizFilePath = "History.json";
             string quizTopic = "История";
             UserData currentUser = authenticationManager.GetCurrectUser();
             QuizSerializer quizSerializer = new QuizSerializer();
-            Dictionary<string, Dictionary<string, bool>> quizHistory = quizSerializer.DeserializeQuiz(HistoryQuizFilePath);
+            List<QuestionQuiz> quizHistory = quizSerializer.DeserializeQuiz(historyQuizFilePath);
 
             if (quizHistory.Count == 0)
             {
@@ -50,41 +52,41 @@ namespace UserInterfaseMenuNamespace
             Console.Clear();
 
             ConsoleKeyInfo keyInfo;
-            
-            foreach (var question in quizHistory)
+
+            foreach (QuestionQuiz questionQuiz in quizHistory)
             {
                 Console.WriteLine("╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗");
                 Console.WriteLine("║                                                                                                              ");
-                Console.WriteLine($"║Вопроc {counterQuestions++} из {totalQuestions} \n {question.Key}                                                                                        ");
+                Console.WriteLine($"║Вопроc {counterQuestions++} из {totalQuestions} \n {questionQuiz.Question}                                                                                        ");
                 Console.WriteLine("║                                                                                                              ");
                 Console.WriteLine("╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
-                int countAnswer = 0;
-                int optionAnswer = 1;
-                foreach (var answer in question.Value)
+
+                int counterAnswers = 0;
+                foreach (AnswerQuiz answer in questionQuiz.Answers)
                 {
-                    Console.WriteLine($"  {optionAnswer}. {answer.Key}");
-                    optionAnswer++;
-                    countAnswer++;
+                    counterAnswers++;
+                    Console.WriteLine($"{counterAnswers}. {answer.Answer}");
                 }
 
-                bool validArgument = false;
-                while (!validArgument)
+                int userAnswer = -1;
+                bool isValidAnswer = false;
+
+                while (!isValidAnswer)
                 {
-                    keyInfo = Console.ReadKey();
-                    if (keyInfo.Key >= ConsoleKey.D1 && keyInfo.Key <= (ConsoleKey)((int)ConsoleKey.D1 + countAnswer - 1))
+                    keyInfo = Console.ReadKey(true);
+                    if (char.IsDigit(keyInfo.KeyChar))
                     {
-                        validArgument = true;
-                        int selectedOptionIndex = keyInfo.Key - ConsoleKey.D1;
-                        var selectedOption = question.Value.ElementAt(selectedOptionIndex);
-                        if (selectedOption.Value)
+                        userAnswer = int.Parse(keyInfo.KeyChar.ToString());
+                        if (userAnswer >= 1 && userAnswer <= counterAnswers)
                         {
-                            correctAnswers++;
+                            isValidAnswer = true;
                         }
                     }
-                    else
-                    {
-                        Console.WriteLine("Некорректный выбор. Повторите ввод.");
-                    }
+                }
+                AnswerQuiz selectedAnswer = questionQuiz.Answers[userAnswer - 1];
+                if (selectedAnswer.IsCorrectAnswer)
+                {
+                    correctAnswers++;
                 }
                 Console.Clear();
             }
@@ -116,7 +118,7 @@ namespace UserInterfaseMenuNamespace
 
             keyInfo = Console.ReadKey();
 
-            if(keyInfo.Key <= ConsoleKey.D1 && keyInfo.Key >= ConsoleKey.D0)
+            if (keyInfo.Key <= ConsoleKey.D1 && keyInfo.Key >= ConsoleKey.D0)
             {
                 if (keyInfo.Key == ConsoleKey.D1)
                 {
@@ -132,9 +134,14 @@ namespace UserInterfaseMenuNamespace
                 Console.WriteLine("Некорректный ввод");
             }
         }
+
         private void GeographyQuiz()
         {
-            // Code...
+            //string GeographyQuizFilePath = "Geography.json";
+            //string quizTopic = "История";
+            //UserData currentUser = authenticationManager.GetCurrectUser();
+            //QuizSerializer quizSerializer = new QuizSerializer();
+            //Dictionary<string, AnswerQuiz> quizHistory = quizSerializer.DeserializeQuiz(GeographyQuizFilePath);
         }
         private void BiologyQuiz()
         {
@@ -223,7 +230,7 @@ namespace UserInterfaseMenuNamespace
                 string loginAuthUser = Console.ReadLine();
                 while (!DataCorrectness.isCheckLogin(loginAuthUser))
                 {
-                    Auxiliary.AuxiliaryLog(text, cursorPositionInput, cursorNotifyAndInput);
+                    Auxiliary.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
                     loginAuthUser = Console.ReadLine();
                 }
 
@@ -234,7 +241,7 @@ namespace UserInterfaseMenuNamespace
                 string passwordAuthUser = Console.ReadLine();
                 while (!DataCorrectness.isCheckPassword(passwordAuthUser))
                 {
-                    Auxiliary.AuxiliaryLog(text, cursorPositionInput, cursorNotifyAndInput);
+                    Auxiliary.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
                     passwordAuthUser = Console.ReadLine();
                 }
                 isAuthorization = authenticationManager.LoginUser(loginAuthUser, passwordAuthUser);
@@ -331,7 +338,7 @@ namespace UserInterfaseMenuNamespace
             string loginRegistrationUser = Console.ReadLine();
             while (!DataCorrectness.isCheckLogin(loginRegistrationUser))
             {
-                Auxiliary.AuxiliaryLog(text, cursorPositionInput, cursorNotifyAndInput);
+                Auxiliary.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
                 loginRegistrationUser = Console.ReadLine();
             }
 
@@ -343,7 +350,7 @@ namespace UserInterfaseMenuNamespace
             string passwordRegistrationUser = Console.ReadLine();
             while (!DataCorrectness.isCheckPassword(passwordRegistrationUser))
             {
-                Auxiliary.AuxiliaryLog(text, cursorPositionInput, cursorNotifyAndInput);
+                Auxiliary.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
                 passwordRegistrationUser = Console.ReadLine();
             }
             string passwordEncrypt = aesEncryption.Encrypt(passwordRegistrationUser);
@@ -357,7 +364,7 @@ namespace UserInterfaseMenuNamespace
             string dateBirthRegistrationUser = Console.ReadLine();
             while (!DataCorrectness.IsCheckDate(dateBirthRegistrationUser))
             {
-                Auxiliary.AuxiliaryLog(text, cursorPositionInput, cursorNotifyAndInput);
+                Auxiliary.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
                 dateBirthRegistrationUser = Console.ReadLine();
             }
             DateTime correctData = DataCorrectness.ConvertToDate(dateBirthRegistrationUser);
@@ -423,7 +430,7 @@ namespace UserInterfaseMenuNamespace
                     }
                     else if (keyInfo.Key == ConsoleKey.D2)
                     {
-                        GeographyQuiz();
+                        //GeographyQuiz();
                     }
                     else if (keyInfo.Key == ConsoleKey.D3)
                     {
@@ -491,6 +498,7 @@ namespace UserInterfaseMenuNamespace
 
 
                         text = "Недопустимый формат пароля";
+
                         cursorPositionInput = 58;
                         cursorNotifyAndInput = 6;
 
@@ -499,21 +507,35 @@ namespace UserInterfaseMenuNamespace
 
                         while (!DataCorrectness.isCheckPassword(newPassword))
                         {
-                            Auxiliary.AuxiliaryLog(text, cursorPositionInput, cursorNotifyAndInput);
+                            Auxiliary.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
                             newPassword = Console.ReadLine();
                         }
 
                         string NewPasswordEncrypt = aesEncryption.Encrypt(newPassword);
                         currentUser.Password = NewPasswordEncrypt;
 
-                        Console.Clear();
-                        Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
-                        Console.WriteLine("\t\t\t\t║                                                       ║");
-                        Console.WriteLine("\t\t\t\t║               Пароль успешно изменен                  ║");
-                        Console.WriteLine("\t\t\t\t║                                                       ║");
-                        Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+                        if(currentUser != null)
+                        {
+                            text = "Пароль был успешно изменен";
+                            Auxiliary.NotifyChangeSettings(text);
 
-                        LoadData.SaveUserDataForUser(currentUser);
+                            LoadData.SaveUserDataForUser(currentUser);
+
+                            Thread.Sleep(1000);
+                            LoginForm();
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
+                            Console.WriteLine("\t\t\t\t║                                                       ║");
+                            Console.WriteLine("\t\t\t\t║      Пользователь с указанным логином не найден       ║");
+                            Console.WriteLine("\t\t\t\t║                                                       ║");
+                            Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+
+                            Thread.Sleep(1000);
+                            AuthorizationForm();
+                        }
                     }
                     else if (keyInfo.Key == ConsoleKey.D2)
                     {
@@ -539,7 +561,7 @@ namespace UserInterfaseMenuNamespace
 
                         while (!DataCorrectness.IsCheckDate(newDate))
                         {
-                            Auxiliary.AuxiliaryLog(text, cursorPositionInput, cursorNotifyAndInput);
+                            Auxiliary.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
                             newDate = Console.ReadLine();
                         }
 
@@ -549,14 +571,13 @@ namespace UserInterfaseMenuNamespace
                         {
                             currentUser.DateOfBirth = correctData;
 
-                            Console.Clear();
-                            Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
-                            Console.WriteLine("\t\t\t\t║                                                       ║");
-                            Console.WriteLine("\t\t\t\t║                Дата успешно изменена                  ║");
-                            Console.WriteLine("\t\t\t\t║                                                       ║");
-                            Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+                            text = "Дата была успешно изменена";
+                            Auxiliary.NotifyChangeSettings(text);
 
                             LoadData.SaveUserDataForUser(currentUser);
+
+                            Thread.Sleep(1000);
+                            MainMenu();
                         }
                         else
                         {
@@ -566,6 +587,9 @@ namespace UserInterfaseMenuNamespace
                             Console.WriteLine("\t\t\t\t║      Пользователь с указанным логином не найден       ║");
                             Console.WriteLine("\t\t\t\t║                                                       ║");
                             Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+
+                            Thread.Sleep(1000);
+                            AuthorizationForm();
                         }
                     }
                 }
@@ -580,10 +604,12 @@ namespace UserInterfaseMenuNamespace
 
             myQuizzResult = currentUser.QuizResults;
 
+            Console.WriteLine("╔══════════════════════════════════════════════════════╗");
             foreach (var item in myQuizzResult)
             {
-                Console.WriteLine($"Тема: {item.Key} | Максимальное количество очков: {item.Value}");
+                Console.WriteLine($"║Тема: {item.Key} ║ Максимальное количество очков: {item.Value}      ║");
             }
+            Console.WriteLine("╚══════════════════════════════════════════════════════╝");
             Console.WriteLine("\n Для выхода назад нажмите 1");
             ConsoleKeyInfo keyInfo;
 

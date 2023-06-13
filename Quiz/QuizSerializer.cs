@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using QuestionQuizNamespace;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 
@@ -6,22 +7,21 @@ namespace QuizSerializerNamespace
 {
     public class QuizSerializer
     {
-        public void SerializeQuiz(Dictionary<string, Dictionary<string, bool>> quiz, string nameQuiz)
+        public void SerializeQuiz(List<QuestionQuiz> quiz, string nameQuiz)
         {
             string json = JsonConvert.SerializeObject(quiz, Formatting.Indented);
             File.WriteAllText(nameQuiz, json);
         }
-
-        public Dictionary<string, Dictionary<string, bool>> DeserializeQuiz(string nameQuiz)
+        public List<QuestionQuiz> DeserializeQuiz(string nameQuiz)
         {
             if (File.Exists(nameQuiz))
             {
                 string jsonData = File.ReadAllText(nameQuiz);
-                var deserializedData = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, bool>>>(jsonData);
+                var deserializedData = JsonConvert.DeserializeObject<List<QuestionQuiz>>(jsonData);
                 return deserializedData;
             }
 
-            return new Dictionary<string, Dictionary<string, bool>>();
+            return new List<QuestionQuiz>();
         }
     }
 }
