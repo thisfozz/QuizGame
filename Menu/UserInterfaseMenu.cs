@@ -522,6 +522,10 @@ namespace UserInterfaseMenuNamespace
                             Thread.Sleep(1000);
                             AuthorizationForm();
                         }
+                    } else if(keyInfo.Key == ConsoleKey.D3)
+                    {
+                        Console.Clear();
+                        MainMenu();
                     }
                 }
             }
