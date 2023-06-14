@@ -52,10 +52,7 @@ namespace AuthenticationManagerNamespace
                 currentUser = user;
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
         public void LogoutUser()
         {

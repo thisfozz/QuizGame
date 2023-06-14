@@ -61,19 +61,27 @@ namespace UserInterfaseMenuNamespace
         }
         private void GeographyQuiz()
         {
-            string geographyQuizFilePath = "Geography.json";
+            string nameQuiz = "Geography";
             string quizTopic = "География";
             UserData currentUser = authenticationManager.GetCurrectUser();
-            QuizSerializer quizSerializer = new();
-            List<QuestionQuiz> quizHistory = quizSerializer.DeserializeQuiz(geographyQuizFilePath);
+
+            if (QuizCreator.StartQuiz(nameQuiz))
+            {
+                Console.WriteLine("Не удалось загрузить викторину.");
+                StartNewGame();
+            }
         }
         private void BiologyQuiz()
         {
-            string biologyQuizFilePath = "Biology.json";
+            string nameQuiz = "Biology";
             string quizTopic = "Биология";
             UserData currentUser = authenticationManager.GetCurrectUser();
-            QuizSerializer quizSerializer = new QuizSerializer();
-            List<QuestionQuiz> quizHistory = quizSerializer.DeserializeQuiz(biologyQuizFilePath);
+
+            if (QuizCreator.StartQuiz(nameQuiz))
+            {
+                Console.WriteLine("Не удалось загрузить викторину.");
+                StartNewGame();
+            }
         }
         private void LoadingMyQuizz()
         {
