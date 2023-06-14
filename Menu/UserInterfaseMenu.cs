@@ -16,7 +16,7 @@ namespace UserInterfaseMenuNamespace
 {
     public class UserInterfaseMenu
     {
-        private readonly AuthenticationManagerNamespace.AuthenticationManager authenticationManager = new();
+        private readonly AuthenticationManager authenticationManager = new();
         private readonly AesEncryption aesEncryption = new();
 
         private void HistoryQuiz()
@@ -64,7 +64,7 @@ namespace UserInterfaseMenuNamespace
             string geographyQuizFilePath = "Geography.json";
             string quizTopic = "География";
             UserData currentUser = authenticationManager.GetCurrectUser();
-            QuizSerializer quizSerializer = new QuizSerializer();
+            QuizSerializer quizSerializer = new();
             List<QuestionQuiz> quizHistory = quizSerializer.DeserializeQuiz(geographyQuizFilePath);
         }
         private void BiologyQuiz()
@@ -141,7 +141,7 @@ namespace UserInterfaseMenuNamespace
         private void LoginForm()
         {
             Console.Clear();
-            bool isCorrectData = false, isAuthorization = false;
+            bool isCorrectData = false;
             int LoginAttempt = 0;
             string text = string.Empty;
             int cursorPositionInput, cursorNotifyAndInput;
@@ -172,7 +172,7 @@ namespace UserInterfaseMenuNamespace
                     Auxiliary.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
                     passwordAuthUser = Console.ReadLine();
                 }
-                isAuthorization = authenticationManager.LoginUser(loginAuthUser, passwordAuthUser);
+                bool isAuthorization = authenticationManager.LoginUser(loginAuthUser, passwordAuthUser);
 
 
                 if (isAuthorization)
@@ -255,8 +255,7 @@ namespace UserInterfaseMenuNamespace
             Console.WriteLine("\t\t\t\t║    Дата рождения:                                     ║");
             Console.WriteLine("\t\t\t\t║                                                       ║");
             Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
-
-            bool isRegistration = false;
+            
             string text = string.Empty;
 
             text = "Недопустимый формат логина";
@@ -295,7 +294,7 @@ namespace UserInterfaseMenuNamespace
                 dateBirthRegistrationUser = Console.ReadLine();
             }
             DateTime correctData = DataCorrectness.ConvertToDate(dateBirthRegistrationUser);
-            isRegistration = authenticationManager.RegisterUser(loginRegistrationUser, passwordEncrypt, correctData);
+            bool isRegistration = authenticationManager.RegisterUser(loginRegistrationUser, passwordEncrypt, correctData);
 
             if (isRegistration)
             {
@@ -316,6 +315,9 @@ namespace UserInterfaseMenuNamespace
                 Console.WriteLine("\t\t\t\t║   Пользователь с таким логином уже зарегистрирован    ║");
                 Console.WriteLine("\t\t\t\t║                                                       ║");
                 Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+                
+                Thread.Sleep(1500);
+                RegistrationForm();
             }
         }
         private void StartNewGame()
@@ -423,7 +425,6 @@ namespace UserInterfaseMenuNamespace
                         Console.WriteLine("\t\t\t\t║                                                       ║");
                         Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
 
-
                         text = "Недопустимый формат пароля";
 
                         cursorPositionInput = 58;
@@ -438,11 +439,10 @@ namespace UserInterfaseMenuNamespace
                             newPassword = Console.ReadLine();
                         }
 
-                        string NewPasswordEncrypt = aesEncryption.Encrypt(newPassword);
-                        currentUser.Password = NewPasswordEncrypt;
-
                         if(currentUser != null)
                         {
+                            string NewPasswordEncrypt = aesEncryption.Encrypt(newPassword);
+                            currentUser.Password = NewPasswordEncrypt;
                             text = "Пароль был успешно изменен";
                             Auxiliary.NotifyChangeSettings(text);
 
@@ -453,12 +453,8 @@ namespace UserInterfaseMenuNamespace
                         }
                         else
                         {
-                            Console.Clear();
-                            Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
-                            Console.WriteLine("\t\t\t\t║                                                       ║");
-                            Console.WriteLine("\t\t\t\t║      Пользователь с указанным логином не найден       ║");
-                            Console.WriteLine("\t\t\t\t║                                                       ║");
-                            Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
+                            text = "Пользователь с указанным логином не найден";
+                            Auxiliary.NotifyChangeSettings(text);
 
                             Thread.Sleep(1000);
                             AuthorizationForm();
@@ -525,16 +521,16 @@ namespace UserInterfaseMenuNamespace
         private void ShowTopMyQuizzes()
         {
             Console.Clear();
-            UserData currentUser = authenticationManager.GetCurrectUser();
 
-            Dictionary<string, int> myQuizzResult = new Dictionary<string, int>();
+            UserData currentUser = authenticationManager.GetCurrectUser();
+            Dictionary<string, int> myQuizzResult = new();
 
             myQuizzResult = currentUser.QuizResults;
 
             Console.WriteLine("╔══════════════════════════════════════════════════════╗");
             foreach (var item in myQuizzResult)
             {
-                Console.WriteLine($"║Тема: {item.Key} ║ Максимальное количество очков: {item.Value}      ║");
+                Console.WriteLine($"║Тема: {item.Key} ║ Максимальное количество очков: {item.Value}     ║");
             }
             Console.WriteLine("╚══════════════════════════════════════════════════════╝");
             Console.WriteLine("\n Для выхода назад нажмите 1");
@@ -553,7 +549,7 @@ namespace UserInterfaseMenuNamespace
         }
         private void ShowTop20PlayersQuizzes()
         {
-            AuthenticationManager authenticationManager = new AuthenticationManager();
+            AuthenticationManager authenticationManager = new();
             var AllRegisteredUser = authenticationManager.GetAllRegisteredUser();
 
             Console.Clear();
@@ -564,7 +560,6 @@ namespace UserInterfaseMenuNamespace
                 {
                     totalCountQuizResults += item;
                 }
-                //Console.Clear();
                 Console.WriteLine("╔══════════════════════════════════════════════════════╗");
                 Console.WriteLine("║                                                      ║");
                 Console.WriteLine($"║ Login User: {user.Login}                            ");                         
