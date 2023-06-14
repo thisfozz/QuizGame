@@ -57,7 +57,7 @@ namespace QuizCreatorNamespace
                 Console.Clear();
             }
 
-            Console.WriteLine("Введите название файла для сохранения викторины: ");
+            Console.WriteLine("Введите название файла для сохранения викторины:(без указания типа) ");
             string fileName = Console.ReadLine();
             string filePath = $"{fileName}.json";
 
