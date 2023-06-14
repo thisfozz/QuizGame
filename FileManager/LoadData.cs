@@ -27,7 +27,7 @@ namespace FileManagerNamespace
             File.WriteAllText(FilePath, jsonData);
         }
 
-        public static void SaveUserDataForUser(UserData user)
+        public static void SaveUserDataForUser(UserData user) //XN7dTmsPN32eYP2p/3lvqg==
         {
             List<UserData> users = LoadUserData();
             int index = users.FindIndex(u => u.Login == user.Login);

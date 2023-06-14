@@ -48,8 +48,14 @@ namespace AuthenticationManagerNamespace
             if (user == null) return false;
             string decryptedPassword = aesEncryption.Decrypt(user.Password);
             if (password == decryptedPassword)
+            {
                 currentUser = user;
-            return true;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         public void LogoutUser()
         {

@@ -16,8 +16,8 @@ namespace UserInterfaseMenuNamespace
 {
     public class UserInterfaseMenu
     {
+        private readonly AesEncryption aesEncryption = new AesEncryption();
         private readonly AuthenticationManager authenticationManager = new();
-        private readonly AesEncryption aesEncryption = new();
 
         private void HistoryQuiz()
         {
@@ -238,7 +238,6 @@ namespace UserInterfaseMenuNamespace
         }
         private void RegistrationForm()
         {
-
             int cursorPositionInput, cursorNotifyAndInput;
 
             Console.Clear();
@@ -449,6 +448,7 @@ namespace UserInterfaseMenuNamespace
                             LoadData.SaveUserDataForUser(currentUser);
 
                             Thread.Sleep(1000);
+                            authenticationManager.LogoutUser();
                             LoginForm();
                         }
                         else
