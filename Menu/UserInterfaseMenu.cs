@@ -25,11 +25,12 @@ namespace UserInterfaseMenuNamespace
             string quizTopic = "История";
             UserData currentUser = authenticationManager.GetCurrectUser();
 
-            if (QuizCreator.StartQuiz(nameQuiz))
+            if (!QuizCreator.isCheckFile(nameQuiz))
             {
                 Console.WriteLine("Не удалось загрузить викторину.");
                 StartNewGame();
             }
+            QuizCreator.StartQuiz(nameQuiz);
 
             if (currentUser.QuizResults.TryGetValue(quizTopic, out int existingScore))
             {
@@ -65,11 +66,13 @@ namespace UserInterfaseMenuNamespace
             string quizTopic = "География";
             UserData currentUser = authenticationManager.GetCurrectUser();
 
-            if (QuizCreator.StartQuiz(nameQuiz))
+            if (!QuizCreator.isCheckFile(nameQuiz))
             {
                 Console.WriteLine("Не удалось загрузить викторину.");
+                Thread.Sleep(1000);
                 StartNewGame();
             }
+            QuizCreator.StartQuiz(nameQuiz);
         }
         private void BiologyQuiz()
         {
@@ -77,11 +80,13 @@ namespace UserInterfaseMenuNamespace
             string quizTopic = "Биология";
             UserData currentUser = authenticationManager.GetCurrectUser();
 
-            if (QuizCreator.StartQuiz(nameQuiz))
+            if (!QuizCreator.isCheckFile(nameQuiz))
             {
                 Console.WriteLine("Не удалось загрузить викторину.");
+                Thread.Sleep(1000);
                 StartNewGame();
             }
+            QuizCreator.StartQuiz(nameQuiz);
         }
         private void LoadingMyQuizz()
         {
@@ -366,7 +371,7 @@ namespace UserInterfaseMenuNamespace
                     }
                     else if (keyInfo.Key == ConsoleKey.D2)
                     {
-                        //GeographyQuiz();
+                        GeographyQuiz();
                     }
                     else if (keyInfo.Key == ConsoleKey.D3)
                     {

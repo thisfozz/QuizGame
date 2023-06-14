@@ -65,16 +65,24 @@ namespace QuizCreatorNamespace
 
             Console.WriteLine($"Викторина сохранена в файле: {filePath}");
         }
-        public static bool StartQuiz(string nameQuiz)
+        
+        public static bool isCheckFile(string nameQuiz)
         {
             string filePath = $"{nameQuiz}.json";
-            QuizSerializer quizSerializer = new QuizSerializer();
             List<QuestionQuiz> quizHistory = quizSerializer.DeserializeQuiz(filePath);
 
             if (quizHistory.Count == 0)
             {
                 return false;
             }
+            return true;
+
+        }
+        public static void StartQuiz(string nameQuiz)
+        {
+            string filePath = $"{nameQuiz}.json";
+            QuizSerializer quizSerializer = new QuizSerializer();
+            List<QuestionQuiz> quizHistory = quizSerializer.DeserializeQuiz(filePath);
 
             int totalQuestions = quizHistory.Count;
             int counterQuestions = 0;
@@ -142,8 +150,6 @@ namespace QuizCreatorNamespace
 
             Thread.Sleep(3000);
             Console.Clear();
-
-            return true;
         }
     }
 }
