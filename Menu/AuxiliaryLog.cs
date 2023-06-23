@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace AuxiliaryNamespace
 {
-    public class Auxiliary
+    public abstract class AuxiliaryLog
     {
         public static void AuxiliaryLogErrorinput(string errorMessage, int cursorPositionInput, int cursorNotifyAndInput)
         {

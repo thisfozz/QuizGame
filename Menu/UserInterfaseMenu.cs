@@ -8,6 +8,7 @@ using UserDataNamespace;
 using FileManagerNamespace;
 using QuizCreatorNamespace;
 using AuthenticationManagerNamespace;
+using RegistrationNamespace;
 
 namespace UserInterfaseMenuNamespace
 {
@@ -89,6 +90,7 @@ namespace UserInterfaseMenuNamespace
         {
             // Code...
         }
+        
         private void AuthorizationForm()
         {
             Console.Clear();
@@ -105,7 +107,11 @@ namespace UserInterfaseMenuNamespace
             Console.WriteLine("\t\t\t\t║   3. Выйти из приложения                              ║");
             Console.WriteLine("\t\t\t\t║                                                       ║");
             Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
-
+            Authorization();
+        }
+        private void Authorization()
+        {
+            Registration registration = new Registration();
             ConsoleKeyInfo keyInfo;
 
             bool validArgument = false;
@@ -168,7 +174,7 @@ namespace UserInterfaseMenuNamespace
                 string loginAuthUser = Console.ReadLine();
                 while (!DataCorrectness.isCheckLogin(loginAuthUser))
                 {
-                    Auxiliary.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
+                    AuxiliaryLog.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
                     loginAuthUser = Console.ReadLine();
                 }
 
@@ -179,7 +185,7 @@ namespace UserInterfaseMenuNamespace
                 string passwordAuthUser = Console.ReadLine();
                 while (!DataCorrectness.isCheckPassword(passwordAuthUser))
                 {
-                    Auxiliary.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
+                    AuxiliaryLog.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
                     passwordAuthUser = Console.ReadLine();
                 }
                 bool isAuthorization = authenticationManager.LoginUser(loginAuthUser, passwordAuthUser);
@@ -246,98 +252,20 @@ namespace UserInterfaseMenuNamespace
                 }
             } while (!isCorrectData);
         }
-        private void RegistrationForm()
-        {
-            Console.Clear();
-            Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
-            Console.WriteLine("\t\t\t\t║                                                       ║");
-            Console.WriteLine("\t\t\t\t║                     Регистрация                       ║");
-            Console.WriteLine("\t\t\t\t║                                                       ║");
-            Console.WriteLine("\t\t\t\t╠═══════════════════════════════════════════════════════║");
-            Console.WriteLine("\t\t\t\t║                                                       ║");
-            Console.WriteLine("\t\t\t\t║    Логин:                                             ║");
-            Console.WriteLine("\t\t\t\t║                                                       ║");
-            Console.WriteLine("\t\t\t\t║    Пароль:                                            ║");
-            Console.WriteLine("\t\t\t\t║                                                       ║");
-            Console.WriteLine("\t\t\t\t║    Дата рождения:                                     ║");
-            Console.WriteLine("\t\t\t\t║                                                       ║");
-            Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
-            RegistrationInputData();
-        }
-        private void RegistrationInputData()
-        {
-            int cursorPositionInput, cursorNotifyAndInput;
-            string text = string.Empty;
-
-            text = "Недопустимый формат логина";
-            cursorPositionInput = 44;
-            cursorNotifyAndInput = 6;
-            Console.SetCursorPosition(cursorPositionInput, cursorNotifyAndInput);
-            string loginRegistrationUser = Console.ReadLine();
-            while (!DataCorrectness.isCheckLogin(loginRegistrationUser))
-            {
-                Auxiliary.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
-                loginRegistrationUser = Console.ReadLine();
-            }
-
-            text = "Недопустимый формат пароля";
-            cursorPositionInput = 45;
-            cursorNotifyAndInput = 8;
-            Console.SetCursorPosition(cursorPositionInput, cursorNotifyAndInput);
-            string passwordRegistrationUser = Console.ReadLine();
-            while (!DataCorrectness.isCheckPassword(passwordRegistrationUser))
-            {
-                Auxiliary.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
-                passwordRegistrationUser = Console.ReadLine();
-            }
-            string passwordEncrypt = aesEncryption.Encrypt(passwordRegistrationUser);
-
-            text = "Недопустимый формат даты";
-            cursorPositionInput = 52;
-            cursorNotifyAndInput = 10;
-            Console.SetCursorPosition(cursorPositionInput, cursorNotifyAndInput);
-            string dateBirthRegistrationUser = Console.ReadLine();
-            while (!DataCorrectness.IsCheckDate(dateBirthRegistrationUser))
-            {
-                Auxiliary.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
-                dateBirthRegistrationUser = Console.ReadLine();
-            }
-            DateTime correctData = DataCorrectness.ConvertToDate(dateBirthRegistrationUser);
-
-            bool isRegistration = authenticationManager.RegisterUser(loginRegistrationUser, passwordEncrypt, correctData);
-
-            ProcessRegistrationResult(isRegistration);
-        }
-        private void ProcessRegistrationResult(bool isRegistration)
-        {
-            if (isRegistration)
-            {
-                Console.Clear();
-                Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
-                Console.WriteLine("\t\t\t\t║                                                       ║");
-                Console.WriteLine("\t\t\t\t║             Регистрация прошла успешно                ║");
-                Console.WriteLine("\t\t\t\t║                                                       ║");
-                Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
-                Thread.Sleep(2000);
-                MainMenu();
-            }
-            else
-            {
-                Console.Clear();
-                Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
-                Console.WriteLine("\t\t\t\t║                                                       ║");
-                Console.WriteLine("\t\t\t\t║   Пользователь с таким логином уже зарегистрирован    ║");
-                Console.WriteLine("\t\t\t\t║                                                       ║");
-                Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
-
-                Thread.Sleep(1500);
-                RegistrationForm();
-            }
-        }
         private void Registration()
         {
-            RegistrationForm();
+            using (var registration = new Registration())
+            {
+                registration.RegistrationSuccess += HandleRegistrationSuccess;
+                registration.RegistrationUser();
+            }
         }
+
+        private void HandleRegistrationSuccess(object sender, EventArgs e)
+        {
+            MainMenu();
+        }
+
         private void StartNewGame()
         {
             Console.Clear();
@@ -453,7 +381,7 @@ namespace UserInterfaseMenuNamespace
 
                         while (!DataCorrectness.isCheckPassword(newPassword))
                         {
-                            Auxiliary.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
+                            AuxiliaryLog.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
                             newPassword = Console.ReadLine();
                         }
 
@@ -462,7 +390,7 @@ namespace UserInterfaseMenuNamespace
                             string NewPasswordEncrypt = aesEncryption.Encrypt(newPassword);
                             currentUser.Password = NewPasswordEncrypt;
                             text = "Пароль был успешно изменен";
-                            Auxiliary.NotifyChangeSettings(text);
+                            AuxiliaryLog.NotifyChangeSettings(text);
 
                             LoadData.SaveUserDataForUser(currentUser);
 
@@ -473,7 +401,7 @@ namespace UserInterfaseMenuNamespace
                         else
                         {
                             text = "Пользователь с указанным логином не найден";
-                            Auxiliary.NotifyChangeSettings(text);
+                            AuxiliaryLog.NotifyChangeSettings(text);
 
                             Thread.Sleep(1000);
                             AuthorizationForm();
@@ -503,7 +431,7 @@ namespace UserInterfaseMenuNamespace
 
                         while (!DataCorrectness.IsCheckDate(newDate))
                         {
-                            Auxiliary.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
+                            AuxiliaryLog.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
                             newDate = Console.ReadLine();
                         }
 
@@ -514,7 +442,7 @@ namespace UserInterfaseMenuNamespace
                             currentUser.DateOfBirth = correctData;
 
                             text = "Дата была успешно изменена";
-                            Auxiliary.NotifyChangeSettings(text);
+                            AuxiliaryLog.NotifyChangeSettings(text);
 
                             LoadData.SaveUserDataForUser(currentUser);
 

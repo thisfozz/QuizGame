@@ -8,7 +8,7 @@ namespace AuthenticationManagerNamespace
 {
     public class AuthenticationManager
     {
-        private List<UserData> registeredUsers;
+        private static List<UserData> registeredUsers; // ?? static ??
         private UserData currentUser;
 
         public AuthenticationManager()
@@ -18,18 +18,21 @@ namespace AuthenticationManagerNamespace
         }
         public bool RegisterUser(string loginUser, string passwordUser, DateTime birthdate)
         {
-
             if (registeredUsers.Exists(u => u.Login == loginUser)) return false;
 
             UserData newUser = new UserData(loginUser, passwordUser, birthdate);
             registeredUsers.Add(newUser);
+            SaveRegisteredUsers();
+            currentUser = newUser;
+            return true;
+        }
+
+        private void SaveRegisteredUsers()
+        {
             string jsonUserData = LoadData.toJsonUserData(registeredUsers);
             LoadData.SerializeUserData(jsonUserData);
-            currentUser = newUser;
-
-            return true;
-
         }
+
         public List<UserData> GetAllRegisteredUser()
         {
             return registeredUsers;
@@ -43,6 +46,7 @@ namespace AuthenticationManagerNamespace
         }
         public bool LoginUser(string login, string password)
         {
+            //registeredUsers = LoadData.LoadUserData(); // костыль
             AesEncryption aesEncryption = new AesEncryption();
             UserData user = registeredUsers.Find(u => u.Login == login);
 

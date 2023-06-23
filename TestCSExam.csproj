@@ -75,7 +75,7 @@
     <Compile Include="Quiz\QuestionQuiz.cs" />
     <Compile Include="FileManager\LoadData.cs" />
     <Compile Include="Quiz\QuizSerializer.cs" />
-    <Compile Include="Menu\Auxiliary.cs" />
+    <Compile Include="Menu\AuxiliaryLog.cs" />
     <Compile Include="Menu\UserInterfaseMenu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,6 +83,7 @@
     <Compile Include="UserInformations\UserData.cs" />
     <Compile Include="UserManager\DataCorrectness.cs" />
     <Compile Include="UserManager\AuthenticationManager.cs" />
+    <Compile Include="UserManager\Registration.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
