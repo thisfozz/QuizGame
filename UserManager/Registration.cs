@@ -12,7 +12,6 @@ namespace RegistrationNamespace
         private readonly AesEncryption aesEncryption = new AesEncryption();
         private readonly AuthenticationManager authenticationManager = new AuthenticationManager();
         
-        private bool disposed = false;
         public event EventHandler RegistrationSuccess;
 
         private void RegistrationInputData()
@@ -112,16 +111,7 @@ namespace RegistrationNamespace
 
         public void Dispose()
         {
-            Dispose(true);
             GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposed)
-                return;
-
-            disposed = true;
         }
     }
 }

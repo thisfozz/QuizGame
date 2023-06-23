@@ -19,6 +19,7 @@ namespace UserInterfaseMenuNamespace
 
         private void HistoryQuiz()
         {
+            // Вынести начисление очков в отдельный метод, а лучше вообще запуск викторины в отдельный класс
             string nameQuiz = "History";
             string quizTopic = "История";
             UserData currentUser = authenticationManager.GetCurrectUser();
@@ -61,7 +62,7 @@ namespace UserInterfaseMenuNamespace
         private void GeographyQuiz()
         {
             string nameQuiz = "Geography";
-            string quizTopic = "География";
+            //string quizTopic = "География";
             UserData currentUser = authenticationManager.GetCurrectUser();
 
             if (!QuizCreator.isCheckFile(nameQuiz))
@@ -75,7 +76,7 @@ namespace UserInterfaseMenuNamespace
         private void BiologyQuiz()
         {
             string nameQuiz = "Biology";
-            string quizTopic = "Биология";
+            //string quizTopic = "Биология";
             UserData currentUser = authenticationManager.GetCurrectUser();
 
             if (!QuizCreator.isCheckFile(nameQuiz))
@@ -155,6 +156,7 @@ namespace UserInterfaseMenuNamespace
         }
         private void LoginForm()
         {
+            // Вынести авторизацию(вход по логину паролю) в отдельный класс
             Console.Clear();
             bool isCorrectData = false;
             int LoginAttempt = 0;
