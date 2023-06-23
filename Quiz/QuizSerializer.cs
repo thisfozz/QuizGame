@@ -7,10 +7,11 @@ namespace QuizSerializerNamespace
 {
     public class QuizSerializer
     {
-        public void SerializeQuiz(List<QuestionQuiz> quiz, string nameQuiz)
+        public string toSonQuiz(List<QuestionQuiz> quiz)
         {
             string json = JsonConvert.SerializeObject(quiz, Formatting.Indented);
-            File.WriteAllText(nameQuiz, json);
+
+            return json;
         }
         public List<QuestionQuiz> DeserializeQuiz(string nameQuiz)
         {
@@ -22,6 +23,11 @@ namespace QuizSerializerNamespace
             }
 
             return new List<QuestionQuiz>();
+        }
+
+        public void SerializeQuiz(string jsonQuiz, string nameQuiz)
+        {
+            File.WriteAllText(nameQuiz, jsonQuiz);
         }
     }
 }

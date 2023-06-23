@@ -61,11 +61,12 @@ namespace QuizCreatorNamespace
             string fileName = Console.ReadLine();
             string filePath = $"{fileName}.json";
 
-            quizSerializer.SerializeQuiz(quiz, filePath);
+            string jsonQuiz = quizSerializer.toSonQuiz(quiz);
+
+            quizSerializer.SerializeQuiz(jsonQuiz, filePath);
 
             Console.WriteLine($"Викторина сохранена в файле: {filePath}");
         }
-        
         public static bool isCheckFile(string nameQuiz)
         {
             string filePath = $"{nameQuiz}.json";

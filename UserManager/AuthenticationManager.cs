@@ -23,7 +23,8 @@ namespace AuthenticationManagerNamespace
 
             UserData newUser = new UserData(loginUser, passwordUser, birthdate);
             registeredUsers.Add(newUser);
-            LoadData.SaveUserData(registeredUsers);
+            string jsonUserData = LoadData.toJsonUserData(registeredUsers);
+            LoadData.SerializeUserData(jsonUserData);
             currentUser = newUser;
 
             return true;

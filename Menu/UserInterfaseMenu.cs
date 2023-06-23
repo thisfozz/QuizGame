@@ -2,13 +2,10 @@
 using AesEncryptionNamespace;
 using System.Threading;
 using DataCorrectnessNamespace;
-using QuizSerializerNamespace;
 using System.Collections.Generic;
 using AuxiliaryNamespace;
 using UserDataNamespace;
 using FileManagerNamespace;
-using QuestionQuizNamespace;
-using AnswerQuizNamespace;
 using QuizCreatorNamespace;
 using AuthenticationManagerNamespace;
 
@@ -123,7 +120,7 @@ namespace UserInterfaseMenuNamespace
                     }
                     else if (keyInfo.Key == ConsoleKey.D2)
                     {
-                        RegistrationForm();
+                        Registration();
                     }
                     else
                     {
@@ -251,8 +248,6 @@ namespace UserInterfaseMenuNamespace
         }
         private void RegistrationForm()
         {
-            int cursorPositionInput, cursorNotifyAndInput;
-
             Console.Clear();
             Console.WriteLine("\t\t\t\t╔═══════════════════════════════════════════════════════╗");
             Console.WriteLine("\t\t\t\t║                                                       ║");
@@ -267,7 +262,11 @@ namespace UserInterfaseMenuNamespace
             Console.WriteLine("\t\t\t\t║    Дата рождения:                                     ║");
             Console.WriteLine("\t\t\t\t║                                                       ║");
             Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
-            
+            RegistrationInputData();
+        }
+        private void RegistrationInputData()
+        {
+            int cursorPositionInput, cursorNotifyAndInput;
             string text = string.Empty;
 
             text = "Недопустимый формат логина";
@@ -281,7 +280,6 @@ namespace UserInterfaseMenuNamespace
                 loginRegistrationUser = Console.ReadLine();
             }
 
-
             text = "Недопустимый формат пароля";
             cursorPositionInput = 45;
             cursorNotifyAndInput = 8;
@@ -294,7 +292,6 @@ namespace UserInterfaseMenuNamespace
             }
             string passwordEncrypt = aesEncryption.Encrypt(passwordRegistrationUser);
 
-
             text = "Недопустимый формат даты";
             cursorPositionInput = 52;
             cursorNotifyAndInput = 10;
@@ -306,8 +303,13 @@ namespace UserInterfaseMenuNamespace
                 dateBirthRegistrationUser = Console.ReadLine();
             }
             DateTime correctData = DataCorrectness.ConvertToDate(dateBirthRegistrationUser);
+
             bool isRegistration = authenticationManager.RegisterUser(loginRegistrationUser, passwordEncrypt, correctData);
 
+            ProcessRegistrationResult(isRegistration);
+        }
+        private void ProcessRegistrationResult(bool isRegistration)
+        {
             if (isRegistration)
             {
                 Console.Clear();
@@ -327,10 +329,14 @@ namespace UserInterfaseMenuNamespace
                 Console.WriteLine("\t\t\t\t║   Пользователь с таким логином уже зарегистрирован    ║");
                 Console.WriteLine("\t\t\t\t║                                                       ║");
                 Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
-                
+
                 Thread.Sleep(1500);
                 RegistrationForm();
             }
+        }
+        private void Registration()
+        {
+            RegistrationForm();
         }
         private void StartNewGame()
         {

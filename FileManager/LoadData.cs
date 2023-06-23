@@ -21,20 +21,26 @@ namespace FileManagerNamespace
 
             return new List<UserData>();
         }
-        public static void SaveUserData(List<UserData> users)
+        public static string toJsonUserData(List<UserData> users)
         {
             string jsonData = JsonConvert.SerializeObject(users, Formatting.Indented);
-            File.WriteAllText(FilePath, jsonData);
+
+            return jsonData;
+        }
+        public static void SerializeUserData(string jsonUserData)
+        {
+            File.WriteAllText(FilePath, jsonUserData);
         }
 
-        public static void SaveUserDataForUser(UserData user) //XN7dTmsPN32eYP2p/3lvqg==
+        public static void SaveUserDataForUser(UserData user)
         {
             List<UserData> users = LoadUserData();
             int index = users.FindIndex(u => u.Login == user.Login);
             if (index >= 0)
             {
                 users[index] = user;
-                SaveUserData(users);
+                string jsonUserData = toJsonUserData(users);
+                SerializeUserData(jsonUserData);
             }
         }
     }
