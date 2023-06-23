@@ -16,37 +16,10 @@ namespace AuthenticationManagerNamespace
             registeredUsers = LoadData.LoadUserData();
             currentUser = null;
         }
-        public bool RegisterUser(string loginUser, string passwordUser, DateTime birthdate)
-        {
-            if (registeredUsers.Exists(u => u.Login == loginUser)) return false;
-
-            UserData newUser = new UserData(loginUser, passwordUser, birthdate);
-            registeredUsers.Add(newUser);
-            SaveRegisteredUsers();
-            currentUser = newUser;
-            return true;
-        }
-
-        private void SaveRegisteredUsers()
-        {
-            string jsonUserData = LoadData.toJsonUserData(registeredUsers);
-            LoadData.SerializeUserData(jsonUserData);
-        }
-
-        public List<UserData> GetAllRegisteredUser()
-        {
-            return registeredUsers;
-        }
-        public void UpdatePassword(string login,string password)
-        {
-            if(currentUser != null && currentUser.Login == login)
-            {
-                currentUser.Password = password;
-            }
-        }
         public bool LoginUser(string login, string password)
         {
-            if(registeredUsers != null)
+            registeredUsers = LoadData.LoadUserData();
+            if (registeredUsers != null)
             {
                 AesEncryption aesEncryption = new AesEncryption();
                 UserData user = registeredUsers.Find(u => u.Login == login);
@@ -61,6 +34,28 @@ namespace AuthenticationManagerNamespace
             }
             return false;
         }
+        public bool RegisterUser(string loginUser, string passwordUser, DateTime birthdate)
+        {
+            if (registeredUsers.Exists(u => u.Login == loginUser)) return false;
+
+            UserData newUser = new UserData(loginUser, passwordUser, birthdate);
+            registeredUsers.Add(newUser);
+            SaveRegisteredUsers();
+            currentUser = newUser;
+            return true;
+        }
+        public void UpdatePassword(string login, string password)
+        {
+            if (currentUser != null && currentUser.Login == login)
+            {
+                currentUser.Password = password;
+            }
+        }
+        private void SaveRegisteredUsers()
+        {
+            string jsonUserData = LoadData.toJsonUserData(registeredUsers);
+            LoadData.SerializeUserData(jsonUserData);
+        }
         public void LogoutUser()
         {
             currentUser = null;
@@ -72,6 +67,10 @@ namespace AuthenticationManagerNamespace
         public UserData GetCurrectUser()
         {
             return currentUser;
+        }
+        public List<UserData> GetAllRegisteredUser()
+        {
+            return registeredUsers;
         }
     }
 }
