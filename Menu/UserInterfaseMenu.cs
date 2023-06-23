@@ -111,7 +111,6 @@ namespace UserInterfaseMenuNamespace
         }
         private void Authorization()
         {
-            Registration registration = new Registration();
             ConsoleKeyInfo keyInfo;
 
             bool validArgument = false;

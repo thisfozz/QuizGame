@@ -8,7 +8,7 @@ namespace AuthenticationManagerNamespace
 {
     public class AuthenticationManager
     {
-        private static List<UserData> registeredUsers; // ?? static ??
+        private List<UserData> registeredUsers; // ?? static ??
         private UserData currentUser;
 
         public AuthenticationManager()
@@ -46,16 +46,18 @@ namespace AuthenticationManagerNamespace
         }
         public bool LoginUser(string login, string password)
         {
-            //registeredUsers = LoadData.LoadUserData(); // костыль
-            AesEncryption aesEncryption = new AesEncryption();
-            UserData user = registeredUsers.Find(u => u.Login == login);
-
-            if (user == null) return false;
-            string decryptedPassword = aesEncryption.Decrypt(user.Password);
-            if (password == decryptedPassword)
+            if(registeredUsers != null)
             {
-                currentUser = user;
-                return true;
+                AesEncryption aesEncryption = new AesEncryption();
+                UserData user = registeredUsers.Find(u => u.Login == login);
+
+                if (user == null) return false;
+                string decryptedPassword = aesEncryption.Decrypt(user.Password);
+                if (password == decryptedPassword)
+                {
+                    currentUser = user;
+                    return true;
+                }
             }
             return false;
         }

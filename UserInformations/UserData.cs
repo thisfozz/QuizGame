@@ -1,12 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace UserDataNamespace
 {
     public class UserData
     {
-        [JsonProperty]
         public string Login { get; set; }
         public string Password { get; set; }
         public DateTime DateOfBirth { get; set; }

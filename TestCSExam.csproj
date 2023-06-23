@@ -73,7 +73,7 @@
     <Compile Include="AESCrypt\AesEncryption.cs" />
     <Compile Include="Quiz\AnswerQuiz.cs" />
     <Compile Include="Quiz\QuestionQuiz.cs" />
-    <Compile Include="FileManager\LoadData.cs" />
+    <Compile Include="UserManager\FileManager\LoadData.cs" />
     <Compile Include="Quiz\QuizSerializer.cs" />
     <Compile Include="Menu\AuxiliaryLog.cs" />
     <Compile Include="Menu\UserInterfaseMenu.cs" />
