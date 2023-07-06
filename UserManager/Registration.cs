@@ -19,44 +19,51 @@ namespace RegistrationNamespace
             int cursorPositionInput, cursorNotifyAndInput;
             string text = string.Empty;
 
-            text = "Недопустимый формат логина";
-            cursorPositionInput = 44;
-            cursorNotifyAndInput = 6;
-            Console.SetCursorPosition(cursorPositionInput, cursorNotifyAndInput);
-            string loginRegistrationUser = Console.ReadLine();
-            while (!DataCorrectness.isCheckLogin(loginRegistrationUser))
+            try
             {
-                AuxiliaryLog.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
-                loginRegistrationUser = Console.ReadLine();
-            }
+                text = "Недопустимый формат логина";
+                cursorPositionInput = 44;
+                cursorNotifyAndInput = 6;
+                Console.SetCursorPosition(cursorPositionInput, cursorNotifyAndInput);
+                string loginRegistrationUser = Console.ReadLine();
+                while (!DataCorrectness.isCheckLogin(loginRegistrationUser))
+                {
+                    AuxiliaryLog.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
+                    loginRegistrationUser = Console.ReadLine();
+                }
 
-            text = "Недопустимый формат пароля";
-            cursorPositionInput = 45;
-            cursorNotifyAndInput = 8;
-            Console.SetCursorPosition(cursorPositionInput, cursorNotifyAndInput);
-            string passwordRegistrationUser = Console.ReadLine();
-            while (!DataCorrectness.isCheckPassword(passwordRegistrationUser))
+                text = "Недопустимый формат пароля";
+                cursorPositionInput = 45;
+                cursorNotifyAndInput = 8;
+                Console.SetCursorPosition(cursorPositionInput, cursorNotifyAndInput);
+                string passwordRegistrationUser = Console.ReadLine();
+                while (!DataCorrectness.isCheckPassword(passwordRegistrationUser))
+                {
+                    AuxiliaryLog.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
+                    passwordRegistrationUser = Console.ReadLine();
+                }
+                string passwordEncrypt = aesEncryption.Encrypt(passwordRegistrationUser);
+
+                text = "Недопустимый формат даты";
+                cursorPositionInput = 52;
+                cursorNotifyAndInput = 10;
+                Console.SetCursorPosition(cursorPositionInput, cursorNotifyAndInput);
+                string dateBirthRegistrationUser = Console.ReadLine();
+                while (!DataCorrectness.IsCheckDate(dateBirthRegistrationUser))
+                {
+                    AuxiliaryLog.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
+                    dateBirthRegistrationUser = Console.ReadLine();
+                }
+                DateTime correctData = DataCorrectness.ConvertToDate(dateBirthRegistrationUser);
+
+                bool isRegistration = authenticationManager.RegisterUser(loginRegistrationUser, passwordEncrypt, correctData);
+
+                ProcessRegistrationResult(isRegistration);
+            }
+            catch (Exception ex)
             {
-                AuxiliaryLog.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
-                passwordRegistrationUser = Console.ReadLine();
+                Console.WriteLine($"Невероятная ошибка при регистрации: {ex.Message}");
             }
-            string passwordEncrypt = aesEncryption.Encrypt(passwordRegistrationUser);
-
-            text = "Недопустимый формат даты";
-            cursorPositionInput = 52;
-            cursorNotifyAndInput = 10;
-            Console.SetCursorPosition(cursorPositionInput, cursorNotifyAndInput);
-            string dateBirthRegistrationUser = Console.ReadLine();
-            while (!DataCorrectness.IsCheckDate(dateBirthRegistrationUser))
-            {
-                AuxiliaryLog.AuxiliaryLogErrorinput(text, cursorPositionInput, cursorNotifyAndInput);
-                dateBirthRegistrationUser = Console.ReadLine();
-            }
-            DateTime correctData = DataCorrectness.ConvertToDate(dateBirthRegistrationUser);
-
-            bool isRegistration = authenticationManager.RegisterUser(loginRegistrationUser, passwordEncrypt, correctData);
-
-            ProcessRegistrationResult(isRegistration);
         }
 
         private void ProcessRegistrationResult(bool isRegistration)
@@ -82,7 +89,6 @@ namespace RegistrationNamespace
                 Console.WriteLine("\t\t\t\t╚═══════════════════════════════════════════════════════╝");
 
                 Thread.Sleep(1500);
-                //return false;
             }
         }
         private void RegistrationForm()
