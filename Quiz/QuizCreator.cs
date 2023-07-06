@@ -61,7 +61,7 @@ namespace QuizCreatorNamespace
             string fileName = Console.ReadLine();
             string filePath = $"{fileName}.json";
 
-            string jsonQuiz = quizSerializer.toSonQuiz(quiz);
+            string jsonQuiz = quizSerializer.ToJsonQuiz(quiz);
 
             quizSerializer.SerializeQuiz(jsonQuiz, filePath);
 
@@ -77,7 +77,6 @@ namespace QuizCreatorNamespace
                 return false;
             }
             return true;
-
         }
         public static void StartQuiz(string nameQuiz)
         {

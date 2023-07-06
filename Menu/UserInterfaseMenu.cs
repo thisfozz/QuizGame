@@ -191,7 +191,6 @@ namespace UserInterfaseMenuNamespace
                 }
                 bool isAuthorization = authenticationManager.LoginUser(loginAuthUser, passwordAuthUser);
 
-
                 if (isAuthorization)
                 {
                     isCorrectData = true;

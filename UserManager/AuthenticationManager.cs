@@ -53,7 +53,7 @@ namespace AuthenticationManagerNamespace
         }
         private void SaveRegisteredUsers()
         {
-            string jsonUserData = LoadData.toJsonUserData(registeredUsers);
+            string jsonUserData = LoadData.ToJsonUserData(registeredUsers);
             LoadData.SerializeUserData(jsonUserData);
         }
         public void LogoutUser()
